@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Footer.vue</h2>
+        <h1>Betting View </h1>
     </div>
 </template>
 

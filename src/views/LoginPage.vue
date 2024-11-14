@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Footer.vue</h2>
+        <h2>로그인페이지</h2>
     </div>
 </template>
 
