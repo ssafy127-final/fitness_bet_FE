@@ -1,9 +1,17 @@
+import BettingChallenge from "@/components/betting/BettingChallenge.vue";
+import BettingDetail from "@/components/betting/BettingDetail.vue";
+import BettingFinishedList from "@/components/betting/BettingFinishedList.vue";
+import BettingJoin from "@/components/betting/BettingJoin.vue";
+import BettingList from "@/components/betting/BettingList.vue";
+import MyInfo from "@/components/myPage/MyInfo.vue";
+import MyPoint from "@/components/myPage/MyPoint.vue";
 import BettingView from "@/views/BettingView.vue";
 import HomeView from "@/views/HomeView.vue";
-import LoginPage from "@/views/LoginPage.vue";
-import MainPage from "@/views/MainPage.vue";
+import LoginView from "@/views/LoginView.vue";
 import MissionView from "@/views/MissionView.vue";
 import MyPageView from "@/views/MyPageView.vue";
+import PointStoreView from "@/views/PointStoreView.vue";
+import PointView from "@/views/PointStoreView.vue";
 import RankingView from "@/views/RankingView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -29,22 +37,66 @@ const router = createRouter({
       path: '/betting',
       name: 'betting',
       component: BettingView,
+      children: [
+        {
+          path : '',
+          name : 'bettingList',
+          component : BettingList,
+        },
+        {
+          path : ':id',
+          name : 'bettingDetail',
+          component : BettingDetail,
+        },
+        {
+          path : 'finish',
+          name : 'finishedBetting',
+          component : BettingFinishedList,
+        },
+        {
+          path : 'history/join',
+          name : 'bettingJoinHistory',
+          component : BettingJoin,
+        },
+        {
+          path : 'history/challenge',
+          name : 'bettingChallengeHistory',
+          component : BettingChallenge,
+        }
+      ]
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginPage,
+      component: LoginView,
     },
     {
       path: '/myPage',
       name: 'myPage',
       component: MyPageView,
+      children:[
+        {
+          path : 'point',
+          name : 'myPoint',
+          component : MyPoint
+        },
+        {
+          path : 'info',
+          name : 'myInfo',
+          component : MyInfo
+        }
+      ]
+    },
+    {
+      path: '/point',
+      name: 'point',
+      component: PointStoreView,
     },
   ],
 });
 
 router.beforeEach((to, from) =>{
-  const isLogined = false;
+  const isLogined = true;
   console.log(to)
   console.log(from)
   if(!isLogined && to.name !== 'login'){

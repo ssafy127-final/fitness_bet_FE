@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img src = "@/assets/img/logo.png" alt="로고">
+
     </div>
 </template>
 

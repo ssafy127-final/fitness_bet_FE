@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img src = "@/assets/img/logo.png" alt="로고">
+        <h1>포인트 스토어</h1>
     </div>
 </template>
 
