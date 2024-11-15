@@ -44,7 +44,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) =>{
-  const isLogined = true;
+  const isLogined = false;
   console.log(to)
   console.log(from)
   if(!isLogined && to.name !== 'login'){

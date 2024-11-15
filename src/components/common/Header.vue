@@ -30,7 +30,7 @@ const goToMain = function(){
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 70%;
+        width: 60%;
         margin: 0 auto;
     }
 
