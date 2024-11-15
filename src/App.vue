@@ -24,6 +24,7 @@ const hideHeaderFooter = computed(() => {
 
 <style scoped>
 .content {
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 130px);
+  background-color: #eff5f6;
 }
 </style>

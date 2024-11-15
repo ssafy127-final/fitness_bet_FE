@@ -49,17 +49,17 @@ const goToMain = function () {
 }
 
 .logo {
-  height: 6.25rem;
+  height: 90px;
   cursor: pointer;
 }
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 60%;
+  width: 70%;
   margin: 0 auto;
   padding: 5px;
-  height: 110px;
+  height: 100px;
 }
 
 .menu {
@@ -95,17 +95,17 @@ header {
   width: 250px; /* 필요에 따라 조정 */
   left: 50%; /* 상위 항목의 가운데에 위치하도록 설정 */
   transform: translateX(-50%); /* 드롭다운 메뉴의 중앙을 기준으로 왼쪽으로 50% 이동 */
-  top: 80px;
+  top: 73px;
 }
 .dropdown-category::before {
   content: "";
   display: block;
   position: absolute;
   cursor: pointer;
-  top: -80px; /* 헤더 하단에서 드롭다운 사이 간격 */
+  top: -73px; /* 헤더 하단에서 드롭다운 사이 간격 */
   left: 0;
   right: 0;
-  height: 80px; /* 간격 크기와 동일하게 */
+  height: 73px; /* 간격 크기와 동일하게 */
 }
 
 .menu-category:hover .dropdown-category {
@@ -128,6 +128,7 @@ a {
 
 li a {
   color: black;
+  font-size: 16px;
 }
 .dropdown-category li a:hover {
   color: white;
