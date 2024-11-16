@@ -14,24 +14,25 @@
         <label for="alreadyJoin">참여 완료 배팅 보기</label>
       </div>
     </header>
-    <!-- <BettingListItem v-for="item in store.bettingList" :key="item.id" :betting="item" /> -->
-    <BettingListItem v-for="item in bettingList" :key="item.id" :betting="item" />
+    <div class="content">
+      <!-- <BettingListItem v-for="item in store.bettingList" :key="item.id" :betting="item" /> -->
+      <BettingListItem v-for="item in filterBettingList" :key="item.id" :betting="item" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import BettingListItem from "./BettingListItem.vue";
 import { useBettingStore } from "@/stores/betting";
 
 const selected = ref("total");
+const filterBettingList = ref([]);
 
-const select = (id) => {
-  selected.value = id;
-};
 const store = useBettingStore();
 onMounted(() => {
   store.getList();
+  select("total");
 });
 
 //더미
@@ -46,8 +47,31 @@ const bettingList = ref([
     failCnt: 7,
     successPoint: 300,
     failPoint: 400,
+    history: { id: 2, choice: 1 },
+  },
+  {
+    id: id++,
+    user: { name: "이땡땡" },
+    mission: { content: "팔굽혀펴기" },
+    missionCnt: 7,
+    successCnt: 8,
+    failCnt: 3,
+    successPoint: 440,
+    failPoint: 200,
+    history: null,
   },
 ]);
+const select = (id) => {
+  selected.value = id;
+  if (id === "total") {
+    filterBettingList.value = bettingList.value; // 전체 보기
+  } else if (id === "canJoin") {
+    filterBettingList.value = bettingList.value.filter((item) => !item.history || item.history === null); // 참여 가능 보기
+  } else if (id === "alreadyJoin") {
+    filterBettingList.value = bettingList.value.filter((item) => item.history); // 참여한 리스트 보기
+  }
+};
+console.log(selected.value);
 </script>
 
 <style scoped>
@@ -78,5 +102,12 @@ h3 {
 }
 .headerR input {
   margin: 0 3px 0 20px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 450px;
+  overflow-y: auto;
 }
 </style>
