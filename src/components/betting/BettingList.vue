@@ -1,9 +1,12 @@
 <template>
   <div>
-    <header>
+    <div class="modal" v-show="modalOn">
+      <BettingCreate @modal="changeModal" :data="data" @retry="retryRandom" />
+    </div>
+    <header :class="{ blur: modalOn }">
       <div class="headerL">
         <h3>진행중 배팅</h3>
-        <button class="createBtn">생성하기</button>
+        <button class="createBtn" @click="createBtn">생성하기</button>
       </div>
       <div class="headerR">
         <input type="checkbox" id="total" :checked="selected === 'total'" @change="select('total')" />
@@ -14,7 +17,7 @@
         <label for="alreadyJoin">참여 완료 배팅 보기</label>
       </div>
     </header>
-    <div class="content">
+    <div class="content" :class="{ blur: modalOn }">
       <!-- <BettingListItem v-for="item in store.bettingList" :key="item.id" :betting="item" /> -->
       <BettingListItem v-for="item in filterBettingList" :key="item.id" :betting="item" />
     </div>
@@ -25,10 +28,26 @@
 import { onMounted, onUpdated, ref } from "vue";
 import BettingListItem from "./BettingListItem.vue";
 import { useBettingStore } from "@/stores/betting";
+import BettingCreate from "./modal/BettingCreate.vue";
 
 const selected = ref("total");
 const filterBettingList = ref([]);
+const modalOn = ref(false);
 
+const data = ref([]);
+const createBtn = () => {
+  modalOn.value = true;
+  createBetting();
+};
+const retryRandom = () => createBetting();
+const createBetting = () => {
+  // axios로 데이터 가져오기
+  data.value = {
+    nameList: ["어쩌구", "저쩌구", "블라블라", "어쩌구"],
+    missionList: ["어쩌구", "저쩌구", "블라블라", "어쩌구"],
+    numList: [1, 4, 2, 3, 7, 6, 9],
+  };
+};
 const store = useBettingStore();
 onMounted(() => {
   store.getList();
@@ -72,9 +91,22 @@ const select = (id) => {
   }
 };
 console.log(selected.value);
+const changeModal = () => {
+  modalOn.value = false;
+};
 </script>
 
 <style scoped>
+.modal {
+  position: fixed;
+  z-index: 999;
+  width: 65%;
+  left: 50%;
+  transform: translate(-50%, 5%);
+}
+.blur {
+  opacity: 0.5;
+}
 header {
   margin: 30px 0 20px;
   display: flex;
