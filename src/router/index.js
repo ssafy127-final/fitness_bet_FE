@@ -19,98 +19,93 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: HomeView,
     },
     {
-      path: '/ranking',
-      name: 'ranking',
+      path: "/ranking",
+      name: "ranking",
       component: RankingView,
     },
     {
-      path: '/mission',
-      name: 'mission',
+      path: "/mission",
+      name: "mission",
       component: MissionView,
     },
     {
-      path: '/betting',
-      name: 'betting',
+      path: "/betting",
+      name: "betting",
       component: BettingView,
       children: [
         {
-          path : '',
-          name : 'bettingList',
-          component : BettingList,
+          path: "",
+          name: "bettingList",
+          component: BettingList,
         },
         {
-          path : ':id',
-          name : 'bettingDetail',
-          component : BettingDetail,
+          path: ":id",
+          name: "bettingDetail",
+          component: BettingDetail,
         },
         {
-          path : 'finish',
-          name : 'finishedBetting',
-          component : BettingFinishedList,
+          path: "finish",
+          name: "finishedBetting",
+          component: BettingFinishedList,
         },
         {
-          path : 'history/join',
-          name : 'bettingJoinHistory',
-          component : BettingJoin,
+          path: "history/join",
+          name: "bettingJoinHistory",
+          component: BettingJoin,
         },
         {
-          path : 'history/challenge',
-          name : 'bettingChallengeHistory',
-          component : BettingChallenge,
-        }
-      ]
+          path: "history/challenge",
+          name: "bettingChallengeHistory",
+          component: BettingChallenge,
+        },
+      ],
     },
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
       component: LoginView,
     },
     {
-      path: '/myPage',
-      name: 'myPage',
+      path: "/myPage",
+      name: "myPage",
       component: MyPageView,
-      children:[
+      children: [
         {
-          path : 'point',
-          name : 'myPoint',
-          component : MyPoint
+          path: "point",
+          name: "myPoint",
+          component: MyPoint,
         },
         {
-          path : 'info',
-          name : 'myInfo',
-          component : MyInfo
-        }
-      ]
+          path: "info",
+          name: "myInfo",
+          component: MyInfo,
+        },
+      ],
     },
     {
-      path: '/point',
-      name: 'point',
+      path: "/point",
+      name: "point",
       component: PointStoreView,
     },
   ],
 });
 
-router.beforeEach((to, from) =>{
+router.beforeEach((to, from) => {
   const isLogined = true;
-  console.log(to)
-  console.log(from)
-  if(!isLogined && to.name !== 'login'){
-    return ({ name: "login"});
+  if (!isLogined && to.name !== "login") {
+    return { name: "login" };
   }
-  
-  if(isLogined){
-    if(to.name === 'login'){
 
-      return ({ name : from.name})
+  if (isLogined) {
+    if (to.name === "login") {
+      return { name: from.name };
     }
   }
-})
-
-
+});
 
 export default router;
