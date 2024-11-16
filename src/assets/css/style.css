@@ -11,3 +11,19 @@ body {
 input[type="checkbox"] {
   accent-color: #82d4d9;
 }
+li,
+ul,
+ol {
+  list-style-type: none;
+}
+a {
+  text-decoration: none;
+}
+button {
+  background-color: #82d4d9;
+  cursor: pointer;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 10px;
+}
