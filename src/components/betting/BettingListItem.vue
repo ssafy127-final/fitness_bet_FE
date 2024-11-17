@@ -3,7 +3,7 @@
     <div class="content">
       <p class="checkJoin" v-if="props.betting.history">참여완료</p>
       <h3>
-        <span class="point">{{ props.betting.user.name }}</span
+        <span class="point">{{ props.betting.challengeUser.name }}</span
         >님이 <span class="point">{{ props.betting.mission.content }}</span
         >을(를) <span class="point">{{ props.betting.missionCnt }}</span
         >회(초 안에) 할 수 있다? 없다?

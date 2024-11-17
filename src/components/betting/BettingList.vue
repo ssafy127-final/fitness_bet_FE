@@ -59,7 +59,7 @@ let id = 0;
 const bettingList = ref([
   {
     id: id++,
-    user: { name: "김땡땡" },
+    challengeUser: { name: "김땡땡" },
     mission: { content: "플랭크" },
     missionCnt: 5,
     successCnt: 3,
@@ -70,7 +70,7 @@ const bettingList = ref([
   },
   {
     id: id++,
-    user: { name: "이땡땡" },
+    challengeUser: { name: "이땡땡" },
     mission: { content: "팔굽혀펴기" },
     missionCnt: 7,
     successCnt: 8,
