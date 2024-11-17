@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :class="{ 'finished-container': props.finished }">
     <div class="content">
       <p class="checkJoin" v-if="props.betting.history">참여완료</p>
       <h3>
@@ -14,7 +14,15 @@
         :history="props.betting.history"
       />
     </div>
-    <button class="detail" @click="router.push({ path: `/betting/${props.betting.id}` })">상세보기</button>
+    <button
+      class="detail"
+      :class="{ 'finished-detail': props.finished }"
+      @click="
+        router.push({ path: !props.finished ? `/betting/${props.betting.id}` : `/betting/finish/${props.betting.id}` })
+      "
+    >
+      상세보기
+    </button>
   </div>
 </template>
 
@@ -24,6 +32,7 @@ import BettingProgressBar from "./BettingProgressBar.vue";
 
 const props = defineProps({
   betting: Object,
+  finished: Boolean,
 });
 </script>
 
@@ -35,6 +44,9 @@ const props = defineProps({
   padding: 10px;
   display: grid;
   grid-template-columns: 1fr 60px;
+}
+.finished-container {
+  border: 2px solid #d8d8d8;
 }
 .content {
   text-align: center;
@@ -54,5 +66,8 @@ const props = defineProps({
   background-color: #82d4d9;
   color: white;
   border: none;
+}
+.finished-detail {
+  background-color: #97c1c3;
 }
 </style>
