@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="modal" v-show="modalOn">
-      <BettingCreate @modal="changeModal" :data="data" @retry="retryRandom" />
+      <BettingCreate @modal="changeModal" :data="data" @retry="retryRandom" :modal-on="modalOn" />
     </div>
     <header :class="{ blur: modalOn }">
       <div class="headerL">
@@ -90,7 +90,6 @@ const select = (id) => {
     filterBettingList.value = bettingList.value.filter((item) => item.history); // 참여한 리스트 보기
   }
 };
-console.log(selected.value);
 const changeModal = () => {
   modalOn.value = false;
 };
