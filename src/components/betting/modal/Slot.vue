@@ -16,6 +16,7 @@ import { ref, computed, onMounted, onUpdated } from "vue";
 const props = defineProps({
   text: Array,
   size: String,
+  modalOn: Boolean,
 });
 const currentIndex = ref(0); // 현재 보여질 단어의 인덱스
 
@@ -40,7 +41,9 @@ const startSlotMachine = () => {
 
 // 컴포넌트 로드 시 슬롯머신 자동 실행
 onMounted(() => {
-  startSlotMachine();
+  if (props.modalOn) {
+    startSlotMachine();
+  }
 });
 onUpdated(() => {
   startSlotMachine();

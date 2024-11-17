@@ -20,6 +20,7 @@ export const useUserStore = defineStore("user", () => {
     classNum: 7,
     currentPoint: 30,
     totalPoint: 540,
+    visited: "2024-11-17",
   });
   return { loginUser };
 });
