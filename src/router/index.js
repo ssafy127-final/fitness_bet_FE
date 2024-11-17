@@ -1,7 +1,7 @@
 import BettingChallenge from "@/components/betting/BettingChallenge.vue";
 import BettingDetail from "@/components/betting/BettingDetail.vue";
 import BettingFinishedList from "@/components/betting/BettingFinishedList.vue";
-import BettingJoin from "@/components/betting/BettingJoin.vue";
+import BettingJoinList from "@/components/betting/BettingJoinList.vue";
 import BettingList from "@/components/betting/BettingList.vue";
 import MyInfo from "@/components/myPage/MyInfo.vue";
 import MyPoint from "@/components/myPage/MyPoint.vue";
@@ -56,7 +56,7 @@ const router = createRouter({
         {
           path: "history/join",
           name: "bettingJoinHistory",
-          component: BettingJoin,
+          component: BettingJoinList,
         },
         {
           path: "history/challenge",
