@@ -11,7 +11,6 @@ import LoginView from "@/views/LoginView.vue";
 import MissionView from "@/views/MissionView.vue";
 import MyPageView from "@/views/MyPageView.vue";
 import PointStoreView from "@/views/PointStoreView.vue";
-import PointView from "@/views/PointStoreView.vue";
 import RankingView from "@/views/RankingView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -96,7 +95,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) =>{
-  const isLogined = true;
+  const isLogined = false;
   console.log(to)
   console.log(from)
   if(!isLogined && to.name !== 'login'){
