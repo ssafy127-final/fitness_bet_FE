@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="modal" v-show="modalOn">
-      <BettingCreate @modal="changeModal" :data="data" @retry="retryRandom" :modal-on="modalOn" />
+      <BettingCreate @modal="changeModal" />
     </div>
     <header :class="{ blur: modalOn }">
       <div class="headerL">
@@ -34,20 +34,10 @@ const selected = ref("total");
 const filterBettingList = ref([]);
 const modalOn = ref(false);
 
-const data = ref([]);
 const createBtn = () => {
   modalOn.value = true;
-  createBetting();
 };
-const retryRandom = () => createBetting();
-const createBetting = () => {
-  // axios로 데이터 가져오기
-  data.value = {
-    nameList: ["어쩌구", "저쩌구", "블라블라", "어쩌구"],
-    missionList: ["어쩌구", "저쩌구", "블라블라", "어쩌구"],
-    numList: [1, 4, 2, 3, 7, 6, 9],
-  };
-};
+
 const store = useBettingStore();
 onMounted(() => {
   store.getList();
