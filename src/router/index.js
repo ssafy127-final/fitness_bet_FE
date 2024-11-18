@@ -1,7 +1,8 @@
 import BettingChallenge from "@/components/betting/BettingChallenge.vue";
 import BettingDetail from "@/components/betting/BettingDetail.vue";
+import BettingFinishedDetail from "@/components/betting/BettingFinishedDetail.vue";
 import BettingFinishedList from "@/components/betting/BettingFinishedList.vue";
-import BettingJoin from "@/components/betting/BettingJoin.vue";
+import BettingJoinList from "@/components/betting/BettingJoinList.vue";
 import BettingList from "@/components/betting/BettingList.vue";
 import MyInfo from "@/components/myPage/MyInfo.vue";
 import MyPoint from "@/components/myPage/MyPoint.vue";
@@ -18,81 +19,87 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: HomeView,
     },
     {
-      path: '/ranking',
-      name: 'ranking',
+      path: "/ranking",
+      name: "ranking",
       component: RankingView,
     },
     {
-      path: '/mission',
-      name: 'mission',
+      path: "/mission",
+      name: "mission",
       component: MissionView,
     },
     {
-      path: '/betting',
-      name: 'betting',
+      path: "/betting",
+      name: "betting",
       component: BettingView,
       children: [
         {
-          path : '',
-          name : 'bettingList',
-          component : BettingList,
+          path: "",
+          name: "bettingList",
+          component: BettingList,
         },
         {
-          path : ':id',
-          name : 'bettingDetail',
-          component : BettingDetail,
+          path: ":id",
+          name: "bettingDetail",
+          component: BettingDetail,
         },
         {
-          path : 'finish',
-          name : 'finishedBetting',
-          component : BettingFinishedList,
+          path: "finish",
+          name: "finishedBetting",
+          component: BettingFinishedList,
         },
         {
-          path : 'history/join',
-          name : 'bettingJoinHistory',
-          component : BettingJoin,
+          path: "finish/:id",
+          name: "finishedBettingDetail",
+          component: BettingFinishedDetail,
         },
         {
-          path : 'history/challenge',
-          name : 'bettingChallengeHistory',
-          component : BettingChallenge,
-        }
-      ]
+          path: "history/join",
+          name: "bettingJoinHistory",
+          component: BettingJoinList,
+        },
+        {
+          path: "history/challenge",
+          name: "bettingChallengeHistory",
+          component: BettingChallenge,
+        },
+      ],
     },
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
       component: LoginView,
     },
     {
-      path: '/myPage',
-      name: 'myPage',
+      path: "/myPage",
+      name: "myPage",
       component: MyPageView,
-      children:[
+      children: [
         {
-          path : 'point',
-          name : 'myPoint',
-          component : MyPoint
+          path: "point",
+          name: "myPoint",
+          component: MyPoint,
         },
         {
-          path : 'info',
-          name : 'myInfo',
-          component : MyInfo
-        }
-      ]
+          path: "info",
+          name: "myInfo",
+          component: MyInfo,
+        },
+      ],
     },
     {
-      path: '/point',
-      name: 'point',
+      path: "/point",
+      name: "point",
       component: PointStoreView,
     },
   ],
 });
+
 
 router.beforeEach((to, from) =>{
   const isLogined = false;
@@ -100,16 +107,14 @@ router.beforeEach((to, from) =>{
   console.log(from)
   if(!isLogined && to.name !== 'login'){
     return ({ name: "login"});
-  }
-  
-  if(isLogined){
-    if(to.name === 'login'){
 
-      return ({ name : from.name})
+  }
+
+  if (isLogined) {
+    if (to.name === "login") {
+      return { name: from.name };
     }
   }
-})
-
-
+});
 
 export default router;

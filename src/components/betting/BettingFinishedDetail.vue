@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="modal" v-show="joinModal">
-      <BettingJoin :user-point="userStore.loginUser.currentPoint" @modalOff="joinModal = false" />
-    </div>
-    <div class="detail-container" :class="{ modalOn: joinModal }">
+    <div class="detail-container">
       <h2>
         <span class="point">{{ store.betting.challengeUser?.name }}</span
         >님이 <span class="point">{{ store.betting.mission?.content }}</span
@@ -15,8 +12,13 @@
         :successCnt="store.betting.successCnt"
         :history="store.betting.history"
       />
-      <p v-if="store.betting.history" class="info">참여 완료한 배팅입니다.</p>
-      <p v-else class="info">배팅에 참여해보세요!</p>
+      <p v-if="store.betting.history" class="info">참여했던 배팅입니다.</p>
+      <p v-else class="info">종료된 배팅입니다.</p>
+      <p>
+        {{
+          store.betting?.result == 1 ? "가능 우승!" : store.betting?.result == -1 ? "불가능 우승!" : "결과 입력중..."
+        }}
+      </p>
       <div class="review">
         <div>
           <label for="reviewInput">코멘트 남기기</label>
@@ -70,8 +72,7 @@
         </ul>
       </div>
       <div class="btn-group">
-        <button v-if="!store.betting.history" @click="joinModal = true">배팅참여</button>
-        <button @click="router.push({ path: '/betting' })">목록</button>
+        <button @click="router.push({ path: '/betting/finish' })">목록</button>
       </div>
     </div>
   </div>
@@ -86,12 +87,13 @@ import router from "@/router";
 import BettingJoin from "./modal/BettingJoin.vue";
 import { useUserStore } from "@/stores/user";
 const review = ref("");
-const joinModal = ref(false);
 const store = useBettingStore();
-const userStore = useUserStore();
 const route = useRoute();
 onMounted(() => {
+  //임시
   store.getBettingDetail(route.params.id);
+  //이게 진짜임
+  //   store.getFinishedDetail(route.params.id);
   store.getReviewList(route.params.id);
 });
 
@@ -119,16 +121,7 @@ console.log(store.reviewList);
   color: #555;
   margin: 20px 0;
 }
-.modal {
-  position: fixed;
-  width: 40%;
-  z-index: 999;
-  left: 50%;
-  transform: translate(-50%, 15%);
-}
-.modalOn {
-  opacity: 0.5;
-}
+
 .point {
   font-size: 24px;
   color: black;
@@ -140,7 +133,7 @@ console.log(store.reviewList);
   font-size: 14px;
 }
 .review {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .review label {
   color: #9c9c9c;
