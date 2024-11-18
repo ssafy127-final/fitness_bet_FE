@@ -16,37 +16,43 @@ import { ref, computed, onMounted, onUpdated } from "vue";
 const props = defineProps({
   text: Array,
   size: String,
-  modalOn: Boolean,
+  run: Boolean,
 });
 const currentIndex = ref(0); // 현재 보여질 단어의 인덱스
 
 // 애니메이션 효과 스타일
 const slotStyle = computed(() => {
-  return {
-    transform: `translateY(-${currentIndex.value * 50}px)`, // 한 단어 높이만큼 이동
-    transition: "transform 0.5s ease-out", // 부드럽게 이동
-  };
+  if (currentIndex.value == 0) {
+    return {
+      transform: `translateY(0px)`,
+    };
+  } else {
+    return {
+      transform: `translateY(-${currentIndex.value * 50}px)`, // 한 단어 높이만큼 이동
+      transition: "transform 0.5s ease-out", // 부드럽게 이동
+    };
+  }
 });
 
 // 슬롯머신 작동 로직
 const startSlotMachine = () => {
+  currentIndex.value = 0;
   let interval = setInterval(() => {
     if (currentIndex.value < props.text.length - 1) {
       currentIndex.value++; // 다음 단어로 이동
     } else {
       clearInterval(interval); // 마지막 단어에서 멈춤
     }
-  }, 100); // 단어 이동 간격 0.5초
+  }, 150); // 단어 이동 간격 0.5초
 };
 
 // 컴포넌트 로드 시 슬롯머신 자동 실행
-onMounted(() => {
-  if (props.modalOn) {
-    startSlotMachine();
-  }
-});
+const emit = defineEmits(["changeRunState"]);
 onUpdated(() => {
-  startSlotMachine();
+  if (props.run) {
+    startSlotMachine();
+    emit("changeRunState");
+  }
 });
 </script>
 
