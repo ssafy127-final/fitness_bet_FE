@@ -14,7 +14,7 @@
     <div class="btn-group">
       <button @click="firstRun" v-if="first">돌리기</button>
       <button @click="retry" v-if="!first">다시 돌리기</button>
-      <button @click="$emit('modal')">등록하기</button>
+      <button @click="regist">등록하기</button>
       <button @click="cancel">취소하기</button>
     </div>
   </div>
@@ -25,6 +25,7 @@ import { ref } from "vue";
 import Slot from "./Slot.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
+import { useBettingStore } from "@/stores/betting";
 const data = ref({
   nameList: [],
   missionList: [],
@@ -34,87 +35,50 @@ const first = ref(true);
 const run = ref(false);
 const REST_API_URL = `http://localhost:1219/betting`;
 const userStore = useUserStore();
+const bettingStore = useBettingStore();
+const createBetting = ref({
+  missionId: "",
+  missionCnt: "",
+  challenger: "",
+});
 const getData = () => {
-  axios.get(`${REST_API_URL}/slot`).then((res) => console.log(res.data));
+  axios.get(`${REST_API_URL}/slot`).then((res) => {
+    console.log(res.data);
+    data.value.nameList = res.data.users.map((item) => item.name);
+    data.value.missionList = res.data.missions.map((item) => item.content);
+    data.value.numList = ["", 4, 6, 7, 24, 63, 42, 12, 21, 51, 28, 42, 11, 29, 34];
+  });
+  axios.get(`${REST_API_URL}/create`, { params: { id: userStore.loginUser.id } }).then((res) => {
+    console.log(res);
+    data.value.nameList = [...data.value.nameList, res.data.challengeUser.name];
+    data.value.missionList = [...data.value.missionList, ...data.value.missionList, res.data.mission.content];
+    data.value.numList = [...data.value.numList, res.data.missionCnt];
+
+    createBetting.value.missionId = res.data.mission.id;
+    createBetting.value.missionCnt = res.data.missionCnt;
+    createBetting.value.challenger = res.data.challengeUser.id;
+  });
 };
 const firstRun = () => {
   getData();
-  // axios로 데이터 가져오기
-  data.value = {
-    nameList: [
-      "신땡땡",
-      "이땡땡",
-      "최땡땡",
-      "김땡땡",
-      "박땡땡",
-      "김땡땡",
-      "최땡땡",
-      "신땡땡",
-      "이땡땡",
-      "최땡땡",
-      "김땡땡",
-      "박땡땡",
-      "김땡땡",
-      "최땡땡",
-      "신땡땡",
-      "이땡땡",
-      "최땡땡",
-      "김땡땡",
-      "박땡땡",
-      "김땡땡",
-      "최땡땡",
-    ],
-    missionList: [
-      "ㅌㅌㅌㅌㅌㅌㅌ",
-      "ㅋㅋㅋㅋㅋ",
-      "~~~~~",
-      "!!!!!",
-      "?????",
-      "ㅌㅌㅌㅌㅌㅌㅌ",
-      "ㅋㅋㅋㅋㅋ",
-      "~~~~~",
-      "!!!!!",
-      "?????",
-    ],
-    numList: [2, 5, 23, 6, 8, 1, 9, 2, 5, 23, 6, 8, 1, 9],
-  };
   first.value = false;
   run.value = true;
 };
 
 const emit = defineEmits(["retry", "modal"]);
+
 const retry = () => {
   getData();
-  // axios로 데이터 가져오기
-  data.value = {
-    nameList: [
-      "김땡땡",
-      "이땡땡",
-      "최땡땡",
-      "김땡땡",
-      "박땡땡",
-      "김땡땡",
-      "박땡땡",
-      "김땡땡",
-      "이땡땡",
-      "최땡땡",
-      "김땡땡",
-      "박땡땡",
-      "김땡땡",
-      "박땡땡",
-      "김땡땡",
-      "이땡땡",
-      "최땡땡",
-      "김땡땡",
-      "박땡땡",
-      "김땡땡",
-      "박땡땡",
-    ],
-    missionList: ["!!!!!", "ㅋㅋㅋㅋㅋ", "~~~~~", "!!!!!", "......", "!!!!!", "ㅋㅋㅋㅋㅋ", "~~~~~", "!!!!!", "......"],
-    numList: [2, 5, 23, 6, 8, 1, 31, 2, 5, 23, 6, 8, 1, 31],
-  };
   run.value = true;
 };
+
+const regist = () => {
+  if (confirm("배팅을 생성하시겠습니까?")) {
+    emit("modal");
+    bettingStore.registBet(createBetting.value, userStore.loginUser.id);
+  }
+};
+
 const cancel = () => {
   emit("modal");
   data.value = {
@@ -124,6 +88,7 @@ const cancel = () => {
   };
   first.value = true;
 };
+
 const props = defineProps({
   data: Object,
 });

@@ -2,21 +2,13 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
-const REST_API_URL = `http://localhost:1219/betting`;
-// const userCampus = sessionStorage.getItem("campus");
-const userCampus = "서울";
-// const userClassNum = sessionStorage.getItem("classNum");
-const userClassNum = 7;
-// const userId = sessionStorage.getItem("userId");
-const userId = "1000001";
-
-let id = 0;
 export const useBettingStore = defineStore("betting", () => {
+  const REST_API_URL = `http://localhost:1219/betting`;
   const bettingList = ref([]);
   const betting = ref({});
   const reviewList = ref([]);
 
-  const getList = () => {
+  const getList = (userId) => {
     axios
       .get(REST_API_URL, { params: { userId } })
       .then((res) => (bettingList.value = res.data))
@@ -27,24 +19,23 @@ export const useBettingStore = defineStore("betting", () => {
     betting.value = bettingList.value.find((item) => item.id == id);
   };
 
-  const getReviewList = (bettingId) => {
-    reviewList.value = [
-      {
-        id: 0,
-        writerName: "최혁규",
-        content: "대박박 이거 못하면 집에 가라",
-      },
-      {
-        id: 1,
-        writerName: "배장한",
-        content: "성공 못하면 내 포인트 돌려내",
-      },
-      {
-        id: 2,
-        writerName: "손진호",
-        content: "ㅋㅋㅋㅋㅋㅋㅋㅋ이거 가능?",
-      },
-    ];
+  const registBet = (betting, userId) => {
+    axios
+      .post(`${REST_API_URL}/create`, betting)
+      .then((res) => {
+        console.log(res);
+      })
+      .then(() => {
+        getList(userId);
+        router.push({ path: "/betting" });
+      })
+      .catch((err) => console.log(err));
+  };
+  const getReviewList = (bettingId, userId) => {
+    axios
+      .get(`${REST_API_URL}/${bettingId}`, { params: { userId } })
+      .then((res) => (reviewList.value = res.data))
+      .catch((err) => console.log(err));
   };
 
   const finishedList = ref([]);
@@ -59,6 +50,7 @@ export const useBettingStore = defineStore("betting", () => {
   const getChallengeList = () => {};
 
   return {
+    REST_API_URL,
     bettingList,
     getList,
     betting,
@@ -72,5 +64,6 @@ export const useBettingStore = defineStore("betting", () => {
     getJoinList,
     bettingChallengeList,
     getChallengeList,
+    registBet,
   };
 });
