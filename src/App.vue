@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header v-if="!hideHeaderFooter"></Header>
-    <div class="content">
+    <div class="appVue">
       <RouterView></RouterView>
     </div>
     <Footer v-if="!hideHeaderFooter"></Footer>
@@ -23,7 +23,7 @@ const hideHeaderFooter = computed(() => {
 </script>
 
 <style scoped>
-.content {
+.appVue {
   min-height: calc(100vh - 130px);
   background-color: #eff5f6;
 }

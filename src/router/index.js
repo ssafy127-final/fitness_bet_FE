@@ -107,6 +107,7 @@ const router = createRouter({
 });
 
 
+
 router.beforeEach((to, from) =>{
   const isLogined = false;
   console.log(to)
@@ -115,6 +116,7 @@ router.beforeEach((to, from) =>{
     if(to.name !== 'login' && to.name !=='regist'){ // 가고자 하는 곳이, 로그인 과 회원가입이 아니면
       return ({ name : 'login'}); // 로그인으로 가 
     }
+
   }
 
   if (isLogined) {
