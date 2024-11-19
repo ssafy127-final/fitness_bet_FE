@@ -72,7 +72,7 @@ const userStore = useUserStore();
 const bettingStore = useBettingStore();
 console.log();
 onMounted(() => {
-  bettingStore.getList();
+  bettingStore.getList(userStore.loginUser.id);
 });
 </script>
 

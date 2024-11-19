@@ -20,7 +20,18 @@
       <div class="review">
         <div>
           <label for="reviewInput">코멘트 남기기</label>
-          <input type="text" id="reviewInput" name="review" placeholder="코멘트를 작성해주세요." v-model="review" />
+          <input
+            type="text"
+            id="reviewInput"
+            name="review"
+            placeholder="코멘트를 작성해주세요."
+            v-model="review"
+            @keypress="
+              (e) => {
+                e.keyCode == 13 && createReview();
+              }
+            "
+          />
           <button @click="createReview">등록</button>
         </div>
         <ul class="review-content">
@@ -28,6 +39,7 @@
             <span class="writer">{{ review.writerName }}</span>
             <span class="content">{{ review.content }}</span>
             <svg
+              v-if="review.writer == userId"
               xmlns="http://www.w3.org/2000/svg"
               id="Layer_1"
               data-name="Layer 1"
@@ -37,6 +49,7 @@
               version="1.1"
               xmlns:xlink="http://www.w3.org/1999/xlink"
               xmlns:svgjs="http://svgjs.dev/svgjs"
+              @click="updateReview(review.id, review.content)"
             >
               <g width="100%" height="100%" transform="matrix(1,0,0,1,0,0)">
                 <path
@@ -50,6 +63,8 @@
               </g>
             </svg>
             <svg
+              v-if="review.writer == userId"
+              @click="deleteReview(review.id)"
               xmlns="http://www.w3.org/2000/svg"
               id="Layer_1"
               data-name="Layer 1"
@@ -79,30 +94,73 @@
 
 <script setup>
 import { useBettingStore } from "@/stores/betting";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import BettingProgressBar from "./BettingProgressBar.vue";
 import router from "@/router";
 import BettingJoin from "./modal/BettingJoin.vue";
 import { useUserStore } from "@/stores/user";
+import axios from "axios";
 const review = ref("");
 const joinModal = ref(false);
+const modifyMode = ref("");
 const store = useBettingStore();
 const userStore = useUserStore();
+const userId = userStore.loginUser.id;
 const route = useRoute();
 onMounted(() => {
   store.getBettingDetail(route.params.id);
-  store.getReviewList(route.params.id);
+  store.getReviewList(route.params.id, userId);
 });
-
 const createReview = () => {
   if (review.value.trim() == "") {
     alert("코멘트 내용을 입력해주세요.");
+  } else {
+    if (confirm(modifyMode ? "코멘트를 수정하시겠습니까?" : "코멘트를 등록하시겠습니까?")) {
+      (modifyMode
+        ? axios.put(`${store.REST_API_URL}/review`, {
+            content: review.value,
+            id: modifyMode.value,
+          })
+        : axios.post(`${store.REST_API_URL}/review`, {
+            writer: userId,
+            content: review.value,
+            bettingId: route.params.id,
+          })
+      )
+        .then((res) => {
+          if (res.status == 200) {
+            store.getReviewList(route.params.id, userId);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   }
-  console.log(review.value);
   review.value = "";
+  modifyMode.value = "";
 };
-console.log(store.reviewList);
+const updateReview = (reviewId, content) => {
+  review.value = content;
+  modifyMode.value = reviewId;
+  console.log("update");
+};
+const deleteReview = (reviewId) => {
+  if (confirm("코멘트를 삭제하시겠습니까?")) {
+    axios
+      .delete(`${store.REST_API_URL}/review`, {
+        params: {
+          reviewId,
+        },
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          store.getReviewList(route.params.id, userId);
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+};
+watch(() => store.reviewList);
 </script>
 
 <style scoped>
@@ -178,6 +236,7 @@ input::placeholder {
 }
 svg {
   margin: auto;
+  cursor: pointer;
 }
 .writer {
   font-size: 15px;

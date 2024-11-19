@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUpdated, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import BettingListItem from "./BettingListItem.vue";
 import { useBettingStore } from "@/stores/betting";
 import BettingCreate from "./modal/BettingCreate.vue";
@@ -42,21 +42,30 @@ const store = useBettingStore();
 const userStore = useUserStore();
 const select = (id) => {
   selected.value = id;
+  const list = store.bettingList;
   if (id === "total") {
-    filterBettingList.value = store.bettingList; // 전체 보기
+    filterBettingList.value = list; // 전체 보기
   } else if (id === "canJoin") {
-    filterBettingList.value = store.bettingList.filter((item) => !item.history || item.history === null); // 참여 가능 보기
+    filterBettingList.value = list.filter((item) => !item.history || item.history === null); // 참여 가능 보기
   } else if (id === "alreadyJoin") {
-    filterBettingList.value = store.bettingList.filter((item) => item.history != null); // 참여한 리스트 보기
+    filterBettingList.value = list.filter((item) => item.history != null); // 참여한 리스트 보기
   }
 };
 onMounted(() => {
-  console.log(store.bettingList);
   select("total");
 });
 
+watch(
+  () => store.bettingList,
+  (newValue) => {
+    select(selected.value); // 새 값으로 필터링
+  },
+  { deep: true }
+);
+
 const changeModal = () => {
   modalOn.value = false;
+  select(selected.value);
 };
 </script>
 
