@@ -100,14 +100,12 @@ const router = createRouter({
   ],
 });
 
-
-router.beforeEach((to, from) =>{
-  const isLogined = false;
-  console.log(to)
-  console.log(from)
-  if(!isLogined && to.name !== 'login'){
-    return ({ name: "login"});
-
+router.beforeEach((to, from) => {
+  const isLogined = true;
+  console.log(to);
+  console.log(from);
+  if (!isLogined && to.name !== "login") {
+    return { name: "login" };
   }
 
   if (isLogined) {

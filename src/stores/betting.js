@@ -75,6 +75,8 @@ export const useBettingStore = defineStore("betting", () => {
   const getFinishedDetail = (id) => {
     betting.value = finishedList.value.find((item) => item.id == id);
   };
+  const bettingJoinList = ref([]);
+  const getJoinList = () => {};
   return {
     bettingList,
     getList,
@@ -85,5 +87,7 @@ export const useBettingStore = defineStore("betting", () => {
     finishedList,
     getFinishedList,
     getFinishedDetail,
+    bettingJoinList,
+    getJoinList,
   };
 });
