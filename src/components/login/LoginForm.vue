@@ -8,21 +8,21 @@
         <div class = "login-form">
             <div class ="input-box">
                 <div class = "login-form-id">
-                    <label for="userId" style="font-weight: bold;">아이디 </label>
-                    <input type="text" name="userId" class="login-input" placeholder="ID를 입력하세요">
+                    <label for="userId" class="input-label">아이디 </label>
+                    <input type="text" v-model="loginId" name="userId" class="login-input" placeholder="ID를 입력하세요">
                 </div>
                 
                 <div class = "login-form-password">
-                    <label for="password"style="font-weight: bold;">비밀번호 </label>
-                    <input type = "password" name = "password" class = "login-input" placeholder="비밀번호를 입력하세요">
+                    <label for="password" class="input-label">비밀번호 </label>
+                    <input type = "password" v-model="loginPassword" name = "password" class = "login-input" placeholder="비밀번호를 입력하세요">
                 </div>
             </div>
 
                 <div class = "btns">
 
-                    <button class = "login-btn"> 로그인 </button>
+                    <button class = "login-btn" @click = "login"> 로그인 </button>
                     <button class = "regist-btn" @click="router.push({path : '/regist'})"> 회원가입 </button>
-        
+                
                 </div>
         </div>
 
@@ -31,27 +31,59 @@
 
 <script setup>
 import router from '@/router';
+import axios from 'axios';
+import { ref } from 'vue';
 
+const REST_API_URL = 'http://localhost:1219/user';
+const loginId = ref('');
+const loginPassword = ref('');
+
+const login = function(){
+    const loginUserInfo = ref({
+        id : loginId.value, 
+        pw : loginPassword.value
+    })
+
+    axios.post(`${REST_API_URL}/login`, loginUserInfo.value)
+    .then((response)=>{
+        console.log(response.request.status);
+        if(response.request.status === 200){
+            router.push({path : '/'});
+        }
+    }).catch((response) =>{
+        if(response.request.status === 403){
+            alert("아직 가입 승인이 허가되지 않았습니다. 관리자에게 문의하세요.")
+        }else {
+            alert("로그인 정보가 올바르지 않습니다.");
+        }
+    })
+
+}
 
 </script>
 
 <style scoped>
     .container{
+        height: calc(100vh);
+        background-color: #eff5f6;
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
         gap: 10rem;
     }
 
     #logo {
-        width : 30rem;
+        width : 40rem;
     }
 
     .login-form {
         border: 2px solid #B6B5B5;
-        border-radius: 10px;
+        border-radius: 5%;
         padding: 3rem;
         display: flex;
+        /* text-align: center; */
+        background-color: white;
+        box-shadow: 0px 4px 2px 2px rgba(180, 180, 180, 0.6781);
     }
 
     .login-input {
@@ -67,15 +99,27 @@ import router from '@/router';
     }
 
 .login-input:focus {
-    border-color: #0056b3; /* 포커스 됐을 때 테두리 색 변경 */
+    border-color: #82d4d9; /* 포커스 됐을 때 테두리 색 변경 */
     outline: none; /* 기본 윤곽선 제거 */
 }
 .btns{
     display: flex;
     flex-direction: column;
     gap : 2.5rem;
-    padding-top: 1rem;
+    padding-top: 2.3rem;
     padding-left: 3rem;
+}
+
+.input-label{
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #3d3d3d;
+}
+
+.input-box input{
+    border-radius: 5px;
+    border: 2px solid #D8D8D8;
+    outline-color: #82d4d9;
 }
 
 .login-btn{
