@@ -5,6 +5,7 @@ import BettingFinishedList from "@/components/betting/BettingFinishedList.vue";
 import BettingJoinList from "@/components/betting/BettingJoinList.vue";
 import BettingList from "@/components/betting/BettingList.vue";
 import LoginRegistForm from "@/components/login/LoginRegistForm.vue";
+import AwaitList from "@/components/myPage/AwaitList.vue";
 import MyInfo from "@/components/myPage/MyInfo.vue";
 import MyPoint from "@/components/myPage/MyPoint.vue";
 import { useUserStore } from "@/stores/user";
@@ -97,6 +98,11 @@ const router = createRouter({
           name: "myInfo",
           component: MyInfo,
         },
+        {
+          path : "awaitList",
+          name : "awaitList",
+          component: AwaitList
+        }
       ],
     },
     {
@@ -109,10 +115,11 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const userStore = useUserStore();
-
+  const isAdmin = sessionStorage.getItem("isAdmin");
   console.log(to);
   console.log(from);
   if (!userStore.loginUser) {
+    console.log("로그안안해써")
     // 로그인을 안했는데
     if (to.name !== "login" && to.name !== "regist") {
       // 가고자 하는 곳이, 로그인 과 회원가입이 아니면
@@ -122,9 +129,17 @@ router.beforeEach((to, from) => {
 
   if (userStore.loginUser) {
     if (to.name === "login" || to.name === "regist") {
-      return { name: from.name };
+      return { name: "home" };
     }
   }
-});
+
+  if(isAdmin === "0"){
+    if(to.name === "awaitList"){
+      console.log("응 못가")
+      return {name : "home"}
+    }
+}
+}
+);
 
 export default router;

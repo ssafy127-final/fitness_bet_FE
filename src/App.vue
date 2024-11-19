@@ -13,6 +13,9 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import Footer from "./components/common/Footer.vue";
 import Header from "./components/common/Header.vue";
+import { useUserStore } from "./stores/user";
+const userStore = useUserStore();
+userStore.restoreLogin();
 
 const route = useRoute(); // 현재 라우트 정보를 가져옴
 
