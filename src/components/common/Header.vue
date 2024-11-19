@@ -27,8 +27,10 @@
             <ul class="dropdown-category">
               <li><RouterLink :to="{ name: 'myPoint' }">포인트 내역</RouterLink></li>
               <li><RouterLink :to="{ name: 'myInfo' }">내 정보 수정</RouterLink></li>
+              <li><RouterLink :to="{ name: 'awaitList' }">가입 대기 리스트</RouterLink></li>
             </ul>
           </div>
+          <button class="logout-button" @click="logout">로그아웃</button>
         </div>
       </nav>
     </header>
@@ -37,9 +39,15 @@
 
 <script setup>
 import router from "@/router";
+import { useUserStore } from "@/stores/user";
 
+const userStore = useUserStore();
 const goToMain = function () {
   router.push({ name: "home" });
+};
+
+const logout = () => {
+  userStore.logout(); // Pinia 스토어에서 로그아웃 처리
 };
 </script>
 
