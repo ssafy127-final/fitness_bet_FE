@@ -4,6 +4,7 @@ import BettingFinishedDetail from "@/components/betting/BettingFinishedDetail.vu
 import BettingFinishedList from "@/components/betting/BettingFinishedList.vue";
 import BettingJoinList from "@/components/betting/BettingJoinList.vue";
 import BettingList from "@/components/betting/BettingList.vue";
+import LoginRegistForm from "@/components/login/LoginRegistForm.vue";
 import MyInfo from "@/components/myPage/MyInfo.vue";
 import MyPoint from "@/components/myPage/MyPoint.vue";
 import BettingView from "@/views/BettingView.vue";
@@ -76,6 +77,11 @@ const router = createRouter({
       component: LoginView,
     },
     {
+      path : "/regist",
+      name : "regist",
+      component : LoginRegistForm,
+    },
+    {
       path: "/myPage",
       name: "myPage",
       component: MyPageView,
@@ -100,16 +106,21 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from) => {
-  const isLogined = true;
-  console.log(to);
-  console.log(from);
-  if (!isLogined && to.name !== "login") {
-    return { name: "login" };
+
+
+router.beforeEach((to, from) =>{
+  const isLogined = false;
+  console.log(to)
+  console.log(from)
+  if(!isLogined){ // 로그인을 안했는데
+    if(to.name !== 'login' && to.name !=='regist'){ // 가고자 하는 곳이, 로그인 과 회원가입이 아니면
+      return ({ name : 'login'}); // 로그인으로 가 
+    }
+
   }
 
   if (isLogined) {
-    if (to.name === "login") {
+    if (to.name === "login" || to.name === 'regist') {
       return { name: from.name };
     }
   }

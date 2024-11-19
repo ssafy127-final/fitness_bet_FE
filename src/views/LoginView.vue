@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <h2>로그인페이지</h2>
+    <div class = "container">
         <LoginForm></LoginForm>
     </div>
 </template>
@@ -11,5 +10,8 @@ import LoginForm from '@/components/login/LoginForm.vue';
 </script>
 
 <style scoped>
-
+.container {
+  height: calc(100vh);
+  background-color: #eff5f6;
+}
 </style>
