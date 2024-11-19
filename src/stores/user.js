@@ -1,6 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
+import router from "@/router";
 
 const REST_API_URL = `http://localhost:1219/user`;
 // const userCampus = sessionStorage.getItem("campus");
@@ -19,16 +20,15 @@ export const useUserStore = defineStore("user", () => {
     axios
       .post(`${REST_API_URL}/login`, loginUserInfo)
       .then((response) => {
-        console.log(response.request.status);
-        if (response.request.status === 200) {
+        if (response.status === 200) {
           loginUser.value = response.data;
           router.push({ path: "/" });
         }
       })
       .catch((response) => {
-        if (response.request.status === 403) {
+        if (response.status === 403) {
           alert("아직 가입 승인이 허가되지 않았습니다. 관리자에게 문의하세요.");
-        } else {
+        } else if (response.status === 401) {
           alert("로그인 정보가 올바르지 않습니다.");
         }
       });
