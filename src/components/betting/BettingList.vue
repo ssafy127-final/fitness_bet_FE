@@ -18,7 +18,6 @@
       </div>
     </header>
     <div class="content" :class="{ blur: modalOn }">
-      <!-- <BettingListItem v-for="item in store.bettingList" :key="item.id" :betting="item" /> -->
       <BettingListItem v-for="item in filterBettingList" :key="item.id" :betting="item" />
     </div>
   </div>
@@ -39,47 +38,22 @@ const createBtn = () => {
 };
 
 const store = useBettingStore();
-onMounted(() => {
-  store.getList();
-  select("total");
-});
-
-//더미
-let id = 0;
-const bettingList = ref([
-  {
-    id: id++,
-    challengeUser: { name: "김땡땡" },
-    mission: { content: "플랭크" },
-    missionCnt: 5,
-    successCnt: 3,
-    failCnt: 7,
-    successPoint: 300,
-    failPoint: 400,
-    history: { id: 2, choice: 1 },
-  },
-  {
-    id: id++,
-    challengeUser: { name: "이땡땡" },
-    mission: { content: "팔굽혀펴기" },
-    missionCnt: 7,
-    successCnt: 8,
-    failCnt: 3,
-    successPoint: 440,
-    failPoint: 200,
-    history: null,
-  },
-]);
 const select = (id) => {
   selected.value = id;
   if (id === "total") {
-    filterBettingList.value = bettingList.value; // 전체 보기
+    filterBettingList.value = store.bettingList; // 전체 보기
   } else if (id === "canJoin") {
-    filterBettingList.value = bettingList.value.filter((item) => !item.history || item.history === null); // 참여 가능 보기
+    filterBettingList.value = store.bettingList.filter((item) => !item.history || item.history === null); // 참여 가능 보기
   } else if (id === "alreadyJoin") {
-    filterBettingList.value = bettingList.value.filter((item) => item.history); // 참여한 리스트 보기
+    filterBettingList.value = store.bettingList.filter((item) => item.history != null); // 참여한 리스트 보기
   }
 };
+onMounted(() => {
+  console.log(store.bettingList);
+  //   store.getList();
+  select("total");
+});
+
 const changeModal = () => {
   modalOn.value = false;
 };

@@ -23,6 +23,8 @@
 <script setup>
 import { ref } from "vue";
 import Slot from "./Slot.vue";
+import axios from "axios";
+import { useUserStore } from "@/stores/user";
 const data = ref({
   nameList: [],
   missionList: [],
@@ -30,7 +32,13 @@ const data = ref({
 });
 const first = ref(true);
 const run = ref(false);
+const REST_API_URL = `http://localhost:1219/betting`;
+const userStore = useUserStore();
+const getData = () => {
+  axios.get(`${REST_API_URL}/slot`).then((res) => console.log(res.data));
+};
 const firstRun = () => {
+  getData();
   // axios로 데이터 가져오기
   data.value = {
     nameList: [
@@ -76,6 +84,7 @@ const firstRun = () => {
 
 const emit = defineEmits(["retry", "modal"]);
 const retry = () => {
+  getData();
   // axios로 데이터 가져오기
   data.value = {
     nameList: [
