@@ -6,7 +6,7 @@
     <header :class="{ blur: modalOn }">
       <div class="headerL">
         <h3>진행중 배팅</h3>
-        <button class="createBtn" @click="createBtn">생성하기</button>
+        <button class="createBtn" @click="createBtn" v-if="userStore.loginUser.admin == 1">생성하기</button>
       </div>
       <div class="headerR">
         <input type="checkbox" id="total" :checked="selected === 'total'" @change="select('total')" />
@@ -28,6 +28,7 @@ import { onMounted, onUpdated, ref } from "vue";
 import BettingListItem from "./BettingListItem.vue";
 import { useBettingStore } from "@/stores/betting";
 import BettingCreate from "./modal/BettingCreate.vue";
+import { useUserStore } from "@/stores/user";
 
 const selected = ref("total");
 const filterBettingList = ref([]);
@@ -38,6 +39,7 @@ const createBtn = () => {
 };
 
 const store = useBettingStore();
+const userStore = useUserStore();
 const select = (id) => {
   selected.value = id;
   if (id === "total") {
@@ -50,7 +52,6 @@ const select = (id) => {
 };
 onMounted(() => {
   console.log(store.bettingList);
-  //   store.getList();
   select("total");
 });
 
