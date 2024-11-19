@@ -22,6 +22,7 @@ export const useUserStore = defineStore("user", () => {
       .then((response) => {
         if (response.status === 200) {
           loginUser.value = response.data;
+          console.log(loginUser.value);
           router.push({ path: "/" });
         }
       })
