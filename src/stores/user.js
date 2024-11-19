@@ -13,15 +13,25 @@ const userId = "1000001";
 let id = 0;
 export const useUserStore = defineStore("user", () => {
   // 임시 데이터(로그인하면 axios로 받아오기)
-  const loginUser = ref({
-    id: "1000001",
-    name: "김철수",
-    campus: "서울",
-    classNum: 7,
-    currentPoint: 500,
-    totalPoint: 300,
-    visited: "2024-11-19",
-    admin: 1,
-  });
-  return { loginUser};
+  const loginUser = ref();
+
+  const login = (loginUserInfo) => {
+    axios
+      .post(`${REST_API_URL}/login`, loginUserInfo)
+      .then((response) => {
+        console.log(response.request.status);
+        if (response.request.status === 200) {
+          loginUser.value = response.data;
+          router.push({ path: "/" });
+        }
+      })
+      .catch((response) => {
+        if (response.request.status === 403) {
+          alert("아직 가입 승인이 허가되지 않았습니다. 관리자에게 문의하세요.");
+        } else {
+          alert("로그인 정보가 올바르지 않습니다.");
+        }
+      });
+  };
+  return { loginUser, login };
 });

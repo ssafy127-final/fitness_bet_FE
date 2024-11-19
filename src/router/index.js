@@ -7,6 +7,7 @@ import BettingList from "@/components/betting/BettingList.vue";
 import LoginRegistForm from "@/components/login/LoginRegistForm.vue";
 import MyInfo from "@/components/myPage/MyInfo.vue";
 import MyPoint from "@/components/myPage/MyPoint.vue";
+import { useUserStore } from "@/stores/user";
 import BettingView from "@/views/BettingView.vue";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
@@ -107,10 +108,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-  const isLogined = true;
+  const userStore = useUserStore();
+
   console.log(to);
   console.log(from);
-  if (!isLogined) {
+  if (!userStore.loginUser) {
     // 로그인을 안했는데
     if (to.name !== "login" && to.name !== "regist") {
       // 가고자 하는 곳이, 로그인 과 회원가입이 아니면
@@ -118,7 +120,7 @@ router.beforeEach((to, from) => {
     }
   }
 
-  if (isLogined) {
+  if (userStore.loginUser) {
     if (to.name === "login" || to.name === "regist") {
       return { name: from.name };
     }
