@@ -77,6 +77,9 @@ export const useBettingStore = defineStore("betting", () => {
   };
   const bettingJoinList = ref([]);
   const getJoinList = () => {};
+
+  const bettingChallengeList = ref([]);
+  const getChallengeList = () => {};
   return {
     bettingList,
     getList,
@@ -89,5 +92,7 @@ export const useBettingStore = defineStore("betting", () => {
     getFinishedDetail,
     bettingJoinList,
     getJoinList,
+    bettingChallengeList,
+    getChallengeList,
   };
 });
