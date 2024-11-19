@@ -2,7 +2,7 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
-const REST_API_URL = `http://localhost:1219/betting`;
+const REST_API_URL = `http://localhost:1219/user`;
 // const userCampus = sessionStorage.getItem("campus");
 const userCampus = "서울";
 // const userClassNum = sessionStorage.getItem("classNum");
@@ -22,5 +22,5 @@ export const useUserStore = defineStore("user", () => {
     totalPoint: 540,
     visited: "2024-11-17",
   });
-  return { loginUser };
+  return { loginUser};
 });
