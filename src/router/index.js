@@ -77,9 +77,9 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path : "/regist",
-      name : "regist",
-      component : LoginRegistForm,
+      path: "/regist",
+      name: "regist",
+      component: LoginRegistForm,
     },
     {
       path: "/myPage",
@@ -106,21 +106,20 @@ const router = createRouter({
   ],
 });
 
-
-
-router.beforeEach((to, from) =>{
-  const isLogined = false;
-  console.log(to)
-  console.log(from)
-  if(!isLogined){ // 로그인을 안했는데
-    if(to.name !== 'login' && to.name !=='regist'){ // 가고자 하는 곳이, 로그인 과 회원가입이 아니면
-      return ({ name : 'login'}); // 로그인으로 가 
+router.beforeEach((to, from) => {
+  const isLogined = true;
+  console.log(to);
+  console.log(from);
+  if (!isLogined) {
+    // 로그인을 안했는데
+    if (to.name !== "login" && to.name !== "regist") {
+      // 가고자 하는 곳이, 로그인 과 회원가입이 아니면
+      return { name: "login" }; // 로그인으로 가
     }
-
   }
 
   if (isLogined) {
-    if (to.name === "login" || to.name === 'regist') {
+    if (to.name === "login" || to.name === "regist") {
       return { name: from.name };
     }
   }

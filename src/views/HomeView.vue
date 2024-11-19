@@ -66,10 +66,14 @@ import router from "@/router";
 import { useBettingStore } from "@/stores/betting";
 import { useUserStore } from "@/stores/user";
 import moment from "moment";
+import { onMounted } from "vue";
 
 const userStore = useUserStore();
 const bettingStore = useBettingStore();
 console.log();
+onMounted(() => {
+  bettingStore.getList();
+});
 </script>
 
 <style scoped>
