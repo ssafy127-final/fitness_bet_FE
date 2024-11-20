@@ -15,6 +15,7 @@ export const useUserStore = defineStore("user", () => {
         if (response.status === 200) {
           loginUser.value = response.data;
           console.log(loginUser.value);
+          sessionStorage.setItem("userId", loginUser.value.id)
           sessionStorage.setItem("isAdmin", loginUser.value.admin);
           sessionStorage.setItem("userName", loginUser.value.name);
           sessionStorage.setItem("campus", loginUser.value.campus);
@@ -48,6 +49,7 @@ export const useUserStore = defineStore("user", () => {
     const userName = sessionStorage.getItem("userName");
     if (userName) {
       loginUser.value = {
+        id : sessionStorage.getItem("userId"),
         admin: parseInt(sessionStorage.getItem("isAdmin")),
         name: userName,
         campus: sessionStorage.getItem("campus"),
