@@ -4,8 +4,7 @@
       <h3>종료된 배팅</h3>
     </header>
     <div class="content">
-      <!-- <BettingListItem v-for="item in store.bettingList" :key="item.id" :betting="item" /> -->
-      <BettingListItem v-for="item in bettingList" :key="item.id" :betting="item" finished="true" />
+      <BettingListItem v-for="item in store.finishedList" :key="item.id" :betting="item" finished="true" />
     </div>
   </div>
 </template>
@@ -14,42 +13,14 @@
 import { onMounted, ref } from "vue";
 import BettingListItem from "./BettingListItem.vue";
 import { useBettingStore } from "@/stores/betting";
+import { useUserStore } from "@/stores/user";
 
 const store = useBettingStore();
+const userStore = useUserStore();
 
 onMounted(() => {
-  // store에서 axios로 리스트 가져오고 for 문 대상 바꾸기
-  store.getFinishedList();
+  store.getFinishedList(userStore.loginUser.id);
 });
-
-//더미
-let id = 0;
-const bettingList = ref([
-  {
-    id: id++,
-    challengeUser: { name: "김땡땡" },
-    mission: { content: "플랭크" },
-    missionCnt: 5,
-    successCnt: 3,
-    failCnt: 7,
-    successPoint: 300,
-    failPoint: 400,
-    result: 1,
-    history: { id: 2, choice: 1 },
-  },
-  {
-    id: id++,
-    challengeUser: { name: "이땡땡" },
-    mission: { content: "팔굽혀펴기" },
-    missionCnt: 7,
-    successCnt: 8,
-    failCnt: 3,
-    successPoint: 440,
-    failPoint: 200,
-    result: -1,
-    history: null,
-  },
-]);
 </script>
 
 <style scoped>

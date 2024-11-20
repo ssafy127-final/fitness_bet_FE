@@ -63,8 +63,16 @@
 </template>
 
 <script setup>
+import { useBettingStore } from "@/stores/betting";
+import { useUserStore } from "@/stores/user";
+import axios from "axios";
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
+const store = useBettingStore();
+const userStore = useUserStore();
 const choice = ref(0);
+const emit = defineEmits(["modalOff"]);
 const props = defineProps({
   userPoint: Number,
 });
@@ -87,7 +95,20 @@ const joinBetting = () => {
   if (choice.value == 0) {
     alert("가능 또는 불가능을 선택해주세요.");
   } else {
-    // 배팅 참여 axios 요청 보내기, 컴포넌트 새로고침
+    axios
+      .put(`${store.REST_API_URL}/${route.params.id}`, {
+        player: userStore.loginUser.id,
+        point: point.value,
+        choice: choice.value,
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          store.getDetailFromBack(route.params.id);
+          store.getList(userStore.loginUser.id);
+        }
+      })
+      .then(() => emit("modalOff"))
+      .catch((err) => console.log(err));
   }
 };
 </script>
