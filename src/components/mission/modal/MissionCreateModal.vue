@@ -85,6 +85,9 @@ const regist = function(){
     }
 }
 
+const cancel = () =>{
+  emit("modal");
+}
 
 </script>
 
