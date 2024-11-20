@@ -126,7 +126,7 @@ router.beforeEach((to, from) => {
   const isAdmin = sessionStorage.getItem("isAdmin");
   console.log(to);
   console.log(from);
-  if (!userStore.loginUser) {
+  if (!sessionStorage.getItem("userId")) {
     console.log("로그안안해써")
     // 로그인을 안했는데
     if (to.name !== "login" && to.name !== "regist") {

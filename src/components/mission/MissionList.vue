@@ -1,9 +1,12 @@
 <template>
     <div class="containerBox">
-    <div class="modal" v-show="modalOn">
-      <MissionCreateModal @modal="changeModal" @reload = "reloadData"/>
+    <div class="modal" v-show="createModalOn">
+      <MissionCreateModal @modal="createModalState" @reload = "reloadData"/>
     </div>
-    <header  :class="{ blur: modalOn }">
+    <div class ="modal" v-show="modifyModalOn">
+      <MissionUpdateModal @modal="modifyModalState"/>
+    </div>
+    <header :class="{ blur: modalOn }">
       <h3>미션 목록</h3>
       <div class = "btns"v-if ="loginUserAdmin == 1">
           <button class="createBtn" @click="createMission">미션 추가</button>
@@ -60,6 +63,7 @@ import { useMissionStore } from '@/stores/mission';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 import MissionCreateModal from './modal/MissionCreateModal.vue';
+import MissionUpdateModal from './MissionUpdateModal.vue';
 import axios from 'axios';
 
 
@@ -76,13 +80,24 @@ const reloadData = function(){
 }
 
 const modalOn = ref(false);
+const createModalOn = ref(false);
+const modifyModalOn = ref(false);
 
 const createMission = () => {
+  createModalOn.value = true;
   modalOn.value = true;
 };
 
-const changeModal = () => {
-  modalOn.value = false;
+const modifyMission = () => {
+  modifyModalOn.value = true;
+  modalOn.value = true;
+};
+
+const createModalState = () => {
+  createModalOn.value = false;
+};
+const modifyModalState = () => {
+  modifyModalOn.value = false;
 };
 
 const remove = (missionId) => {
