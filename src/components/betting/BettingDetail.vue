@@ -5,8 +5,8 @@
     </div>
     <div class="detail-container" :class="{ modalOn: joinModal }">
       <h2>
-        <span class="point">{{ store.betting.challengeUser?.name }}</span
-        >님이 <span class="point">{{ store.betting.mission?.content }}</span
+        <span class="point">{{ store.betting?.challengeUser?.name }}</span
+        >님이 <span class="point">{{ store.betting?.mission?.content }}</span
         >을(를) <span class="point">{{ store.betting?.missionCnt }}</span
         >회(초 안에) 할 수 있다? 없다?
       </h2>
@@ -16,6 +16,7 @@
         :history="store.betting.history"
       />
       <p v-if="store.betting.history" class="info">참여 완료한 배팅입니다.</p>
+      <p v-else-if="store.betting.challengeUser.id == userStore.loginUser.id" class="info">도전 진행중입니다.</p>
       <p v-else class="info">배팅에 참여해보세요!</p>
       <div class="review">
         <div>
@@ -85,7 +86,12 @@
         </ul>
       </div>
       <div class="btn-group">
-        <button v-if="!store.betting.history" @click="joinModal = true">배팅참여</button>
+        <button
+          v-if="!store.betting.history && store.betting.challengeUser.id != userStore.loginUser.id"
+          @click="joinModal = true"
+        >
+          배팅참여
+        </button>
         <button @click="router.push({ path: '/betting' })">목록</button>
       </div>
     </div>
@@ -108,16 +114,20 @@ const store = useBettingStore();
 const userStore = useUserStore();
 const userId = userStore.loginUser.id;
 const route = useRoute();
-onMounted(() => {
-  store.getBettingDetail(route.params.id);
-  store.getReviewList(route.params.id, userId);
+onMounted(async () => {
+  try {
+    await store.getBettingDetail(route.params.id);
+    await store.getReviewList(route.params.id, userStore.loginUser.id);
+  } catch (error) {
+    console.error("Error loading betting detail:", error);
+  }
 });
 const createReview = () => {
   if (review.value.trim() == "") {
     alert("코멘트 내용을 입력해주세요.");
   } else {
-    if (confirm(modifyMode ? "코멘트를 수정하시겠습니까?" : "코멘트를 등록하시겠습니까?")) {
-      (modifyMode
+    if (confirm(modifyMode.value ? "코멘트를 수정하시겠습니까?" : "코멘트를 등록하시겠습니까?")) {
+      (modifyMode.value
         ? axios.put(`${store.REST_API_URL}/review`, {
             content: review.value,
             id: modifyMode.value,
@@ -161,6 +171,15 @@ const deleteReview = (reviewId) => {
   }
 };
 watch(() => store.reviewList);
+watch(() => store.betting);
+watch(
+  () => userStore.loginUser,
+  (newLoginUser) => {
+    if (newLoginUser && newLoginUser.id) {
+      store.getReviewList(route.params.id, newLoginUser.id);
+    }
+  }
+);
 </script>
 
 <style scoped>

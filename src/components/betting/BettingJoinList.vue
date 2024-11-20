@@ -52,14 +52,17 @@
 
 <script setup>
 import { useBettingStore } from "@/stores/betting";
+import { useUserStore } from "@/stores/user";
 import { onMounted, ref } from "vue";
 
 const selected = ref("total");
 const store = useBettingStore();
+const userStore = useUserStore();
 const filterBettingJoinList = ref([]);
 
-onMounted(() => {
-  store.getJoinList();
+onMounted(async () => {
+  await userStore.restoreLogin();
+  await store.getJoinList(userStore.loginUser.id);
   select("total");
 });
 const select = (id) => {
