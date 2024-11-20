@@ -35,7 +35,7 @@ export const useUserStore = defineStore("user", () => {
 
   const logout = function(){
     axios.post(`${REST_API_URL}/logout`)
-    .then((response) =>{
+    .then(() =>{
       sessionStorage.clear();
       loginUser.value = null;
       router.push({ name : "login"})
@@ -58,5 +58,43 @@ export const useUserStore = defineStore("user", () => {
       // 필요한 경우 추가적인 로그인 후 처리를 여기에 구현
     }
   };
-  return { loginUser, login, restoreLogin, logout};
+
+  // 우리반의 유저 정보 불러오기 
+  const userList = ref([]);
+
+  const getUserList = function(){
+    axios.get(`${REST_API_URL}/list`)
+    .then((response) =>{
+      console.log(response.data)
+      userList.value = response.data;
+      getNotAcceptedList();
+    })
+  }
+
+  const notAcceptedList = ref([]);
+
+  const getNotAcceptedList = function(){
+    notAcceptedList.value = userList.value.filter((user) => user.accept === 0);
+    console.log(notAcceptedList.value)
+  }
+
+  const approve = function(userId){
+    axios.patch(`${REST_API_URL}/approve/${userId}`)
+    .then((response)=>{
+      console.log(response);
+      console.log(notAcceptedList.value)
+      
+    })
+  }
+
+  const reject = function(userId){
+    axios.delete(`${REST_API_URL}/delete/${userId}`)
+    .then((response) =>{
+      console.log(response);
+    })
+  }
+
+
+  return { loginUser, login, restoreLogin, logout, userList, getUserList, notAcceptedList, getNotAcceptedList
+  };
 });
