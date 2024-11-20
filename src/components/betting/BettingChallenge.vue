@@ -15,20 +15,36 @@
     <table width="100%">
       <thead>
         <tr>
-          <th width="8%">번호</th>
+          <th width="15%">날짜</th>
           <th width="50%">항목</th>
-          <th width="30%">배팅비율</th>
-          <th width="12%">결과</th>
+          <th width="25%">배팅비율</th>
+          <th width="10%">결과</th>
         </tr>
       </thead>
       <tbody v-if="filterBettingChallengeList.length != 0">
         <tr v-for="(betting, idx) in filterBettingChallengeList" :key="betting.id">
-          <td>{{ idx }}</td>
-          <td>
+          <td>{{ betting.regDate }}</td>
+          <td style="text-align: left">
             {{ betting.challengeUser.name }}님이 {{ betting.mission.content }}을(를) {{ betting.mission_cnt }}회(초
             안에) 도전
           </td>
-          <td>가능 vs 불가능</td>
+          <td class="per">
+            <p>
+              가능<br />{{
+                betting.successCnt + betting.failCnt == 0
+                  ? 0
+                  : ((betting.successCnt / (betting.successCnt + betting.failCnt)) * 100).toFixed(0)
+              }}%
+            </p>
+            <p>vs</p>
+            <p>
+              불가능<br />{{
+                betting.successCnt + betting.failCnt == 0
+                  ? 0
+                  : ((betting.failCnt / (betting.successCnt + betting.failCnt)) * 100).toFixed(0)
+              }}%
+            </p>
+          </td>
           <td>{{ betting.result == 1 ? "성공" : "실패" }}</td>
         </tr>
       </tbody>
@@ -43,14 +59,16 @@
 
 <script setup>
 import { useBettingStore } from "@/stores/betting";
+import { useUserStore } from "@/stores/user";
 import { onMounted, ref } from "vue";
 
 const selected = ref("total");
 const store = useBettingStore();
+const userStore = useUserStore();
 const filterBettingChallengeList = ref([]);
 
 onMounted(() => {
-  store.getChallengeList();
+  store.getChallengeList(userStore.loginUser.id);
   select("total");
 });
 const select = (id) => {
@@ -93,12 +111,21 @@ header {
 }
 table {
   border-collapse: collapse;
+  text-align: center;
 }
 tr,
-td,
 th {
   border-bottom: 1.5px solid #7b7a7a;
   padding: 0.5rem 0;
+}
+td {
+  padding: 0.5rem 0;
+}
+.per {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 .no-data {
   text-align: center;
