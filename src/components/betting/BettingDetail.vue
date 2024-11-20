@@ -3,7 +3,8 @@
     <div class="modal" v-show="joinModal">
       <BettingJoin :user-point="userStore.loginUser.currentPoint" @modalOff="joinModal = false" />
     </div>
-    <div class="detail-container" :class="{ modalOn: joinModal }">
+    <div class="modal" v-show="resultModal"><BettingResult @closeResultModal="closeResultModal" /></div>
+    <div class="detail-container" :class="{ modalOn: joinModal, modalOn: resultModal }">
       <h2>
         <span class="point">{{ store.betting?.challengeUser?.name }}</span
         >님이 <span class="point">{{ store.betting?.mission?.content }}</span
@@ -86,8 +87,18 @@
         </ul>
       </div>
       <div class="btn-group">
+        <button v-if="store.betting.result == 0 && userStore.loginUser.admin == 1" @click="finishing">
+          배팅 마감하기
+        </button>
+        <button v-else-if="store.betting.result == 2 && userStore.loginUser.admin == 1" @click="setResultBtn">
+          결과 입력하기
+        </button>
         <button
-          v-if="!store.betting.history && store.betting.challengeUser.id != userStore.loginUser.id"
+          v-if="
+            store.betting.result == 0 &&
+            !store.betting.history &&
+            store.betting.challengeUser.id != userStore.loginUser.id
+          "
           @click="joinModal = true"
         >
           배팅참여
@@ -107,6 +118,8 @@ import router from "@/router";
 import BettingJoin from "./modal/BettingJoin.vue";
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
+import BettingResult from "./modal/BettingResult.vue";
+
 const review = ref("");
 const joinModal = ref(false);
 const modifyMode = ref("");
@@ -180,6 +193,28 @@ watch(
     }
   }
 );
+
+const finishing = () => {
+  if (confirm("배팅을 마감하시겠습니까?")) {
+    axios
+      .put(`${store.REST_API_URL}/${route.params.id}/stop`)
+      .then((res) => {
+        if (res.status == 200) {
+          store.getDetailFromBack(route.params.id);
+          store.getList(userStore.loginUser.id);
+        }
+      })
+      .then(alert("배팅이 마감되었습니다."))
+      .catch((err) => console.log(err));
+  }
+};
+const resultModal = ref(false);
+const setResultBtn = () => {
+  resultModal.value = true;
+};
+const closeResultModal = () => {
+  resultModal.value = false;
+};
 </script>
 
 <style scoped>

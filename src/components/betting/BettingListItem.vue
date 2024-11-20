@@ -1,12 +1,17 @@
 <template>
   <div class="container" :class="{ 'finished-container': props.finished }">
     <div class="content">
-      <p class="checkJoin" v-if="props.betting.history">참여완료</p>
+      <p class="checkJoin info" v-if="props.betting.history">참여완료</p>
+      <div class="finished info">
+        <p v-if="props.betting.result == 2">배팅마감</p>
+      </div>
       <h3>
-        <span class="point">{{ props.betting.challengeUser.name }}</span
-        >님이 <span class="point">{{ props.betting.mission.content }}</span
-        >을(를) <span class="point">{{ props.betting.missionCnt }}</span
-        >회(초 안에) 할 수 있다? 없다?
+        <p>
+          <span class="point">{{ props.betting.challengeUser.name }}</span
+          >님이 <span class="point">{{ props.betting.mission.content }}</span
+          >을(를) <span class="point">{{ props.betting.missionCnt }}</span
+          >회(초 안에) 할 수 있다? 없다?
+        </p>
       </h3>
       <BettingProgressBar
         :failCnt="props.betting.failCnt"
@@ -29,6 +34,8 @@
 <script setup>
 import router from "@/router";
 import BettingProgressBar from "./BettingProgressBar.vue";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 
 const props = defineProps({
   betting: Object,
@@ -45,6 +52,7 @@ const props = defineProps({
   display: grid;
   grid-template-columns: 1fr 60px;
 }
+
 .finished-container {
   border: 2px solid #d8d8d8;
 }
@@ -53,12 +61,18 @@ const props = defineProps({
   position: relative;
   padding: 5px;
 }
-.checkJoin {
+.info {
   position: absolute;
-  top: 0;
-  left: 0;
   font-size: 13px;
   color: #868585;
+  left: 0;
+}
+.checkJoin {
+  top: 0;
+}
+.finished {
+  bottom: 0rem;
+  color: red;
 }
 .detail {
   border-radius: 5px;

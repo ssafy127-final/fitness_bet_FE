@@ -52,6 +52,7 @@ const select = (id) => {
   }
 };
 onMounted(() => {
+  store.getList(userStore.loginUser.id);
   select("total");
 });
 
