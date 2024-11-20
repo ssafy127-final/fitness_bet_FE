@@ -9,8 +9,7 @@
             <ul class="dropdown-category">
               <li><RouterLink :to="{ name: 'bettingList' }">현재 우리반 배팅 보기</RouterLink></li>
               <li><RouterLink :to="{ name: 'finishedBetting' }">종료된 우리반 배팅 보기</RouterLink></li>
-              <li><RouterLink :to="{ name: 'bettingJoinHistory' }">참여 기록 보기</RouterLink></li>
-              <li><RouterLink :to="{ name: 'bettingChallengeHistory' }">챌린지 기록 보기</RouterLink></li>
+
               <li><RouterLink :to="{ name: 'missionList' }">미션 목록 보기</RouterLink></li>
             </ul>
           </div>
@@ -20,15 +19,20 @@
           </div>
 
           <div class="menu-category">
-            <RouterLink :to="{ name: 'mission' }">포인트 교환</RouterLink>
+            <RouterLink :to="{ name: 'point' }">포인트 교환</RouterLink>
           </div>
 
           <div class="menu-category">
             <RouterLink :to="{ name: 'myPage' }">마이페이지</RouterLink>
             <ul class="dropdown-category">
               <li><RouterLink :to="{ name: 'myPoint' }">포인트 내역</RouterLink></li>
-              <li><RouterLink :to="{ name: 'myInfo' }">내 정보 수정</RouterLink></li>
-              <li><RouterLink :to="{ name: 'awaitList' }">가입 대기 리스트</RouterLink></li>
+              <li><RouterLink :to="{ name: 'bettingJoinHistory' }">참여 기록 보기</RouterLink></li>
+              <li><RouterLink :to="{ name: 'bettingChallengeHistory' }">챌린지 기록 보기</RouterLink></li>
+              <li>
+                <RouterLink :to="{ name: 'awaitList' }" v-if="userStore.loginUser.admin == 1"
+                  >가입 대기 리스트</RouterLink
+                >
+              </li>
             </ul>
           </div>
           <button class="logout-button" @click="logout">로그아웃</button>
@@ -55,6 +59,7 @@ const logout = () => {
 <style scoped>
 .container {
   background-color: #607180;
+  position: relative;
 }
 
 .logo {
@@ -78,7 +83,17 @@ header {
   gap: 6rem;
   /* height: 100%; */
 }
-
+.logout-button {
+  position: absolute;
+  right: 2rem;
+  top: 1rem;
+  background-color: inherit;
+  border: 2px solid #9aabb9;
+  padding: 5px 7px;
+}
+.logout-button:hover {
+  font-weight: bold;
+}
 .menu-category {
   position: relative;
   display: block; /* 필요하다면 이를 flex로 변경 */
