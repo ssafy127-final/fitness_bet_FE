@@ -69,18 +69,22 @@ export const useBettingStore = defineStore("betting", () => {
     betting.value = finishedList.value.find((item) => item.id == id);
   };
   const bettingJoinList = ref([]);
-  const getJoinList = () => {
+  const getJoinList = (id) => {
     axios
-      .get(`${REST_API_URL}/history/join`)
+      .get(`${REST_API_URL}/history/join`, { params: { id } })
       .then((res) => {
-        console.log(res.data);
         bettingJoinList.value = res.data;
       })
       .catch((err) => console.log(err));
   };
 
   const bettingChallengeList = ref([]);
-  const getChallengeList = () => {};
+  const getChallengeList = (id) => {
+    axios
+      .get(`${REST_API_URL}/history/challenger`, { params: { id } })
+      .then((res) => (bettingChallengeList.value = res.data))
+      .catch((err) => console.log(err));
+  };
 
   return {
     REST_API_URL,

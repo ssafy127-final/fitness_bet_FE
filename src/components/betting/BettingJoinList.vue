@@ -15,26 +15,38 @@
     <table width="100%">
       <thead>
         <tr>
-          <th width="8%">번호</th>
-          <th width="40%">항목</th>
-          <th width="10%">선택</th>
-          <th width="12%">배팅 포인트</th>
-          <th width="8%">결과</th>
-          <th width="12%">획득 포인트</th>
+          <th width="15%">날짜</th>
+          <th width="37%">항목</th>
+          <th width="8%">선택</th>
+          <th width="10%">배팅 포인트</th>
+          <th width="10%">결과</th>
+          <th width="10%">획득 포인트</th>
         </tr>
       </thead>
       <tbody v-if="filterBettingJoinList.length != 0">
         <tr v-for="(history, idx) in filterBettingJoinList" :key="history.id">
-          <td>{{ idx }}</td>
-          <td>{{ history.betting.mission.content }}</td>
+          <td>{{ history.betting.regDate }}</td>
+          <td style="text-align: left">{{ history.betting.mission.content }}</td>
           <td>{{ history.choice == 1 ? "가능" : "불가능" }}</td>
           <td>{{ history.point }} Point</td>
-          <td>{{ history.betting.result == history.choice ? "승" : "패" }}</td>
+          <td>
+            {{
+              history.betting.result == 0
+                ? "진행중"
+                : history.betting.result == 2
+                ? "결과입력중"
+                : history.betting.result == history.choice
+                ? "승"
+                : "패"
+            }}
+          </td>
           <td>
             {{
               history.betting.result == history.choice
-                ? (history.betting.success_point + history.betting.fail_point) /
-                    (history.choice == 1 ? history.betting.success_point : history.betting.fail_point / history.point) +
+                ? (history.betting.successPoint + history.betting.failPoint) /
+                    (history.choice == 1
+                      ? history.betting.successPoint / history.point
+                      : history.betting.failPoint / history.point) +
                   " Point"
                 : "-"
             }}
@@ -53,16 +65,15 @@
 <script setup>
 import { useBettingStore } from "@/stores/betting";
 import { useUserStore } from "@/stores/user";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const selected = ref("total");
 const store = useBettingStore();
 const userStore = useUserStore();
 const filterBettingJoinList = ref([]);
 
-onMounted(async () => {
-  await userStore.restoreLogin();
-  await store.getJoinList(userStore.loginUser.id);
+onMounted(() => {
+  store.getJoinList(userStore.loginUser.id); // 로그인 후 데이터 가져오기
   select("total");
 });
 const select = (id) => {
@@ -105,12 +116,16 @@ header {
 }
 table {
   border-collapse: collapse;
+  text-align: center;
 }
 tr,
 td,
 th {
   border-bottom: 1.5px solid #7b7a7a;
   padding: 0.5rem 0;
+}
+td {
+  padding: 1rem 0;
 }
 .no-data {
   text-align: center;
