@@ -4,7 +4,7 @@
       <BettingJoin :user-point="userStore.loginUser.currentPoint" @modalOff="joinModal = false" />
     </div>
     <div class="modal" v-show="resultModal"><BettingResult @closeResultModal="closeResultModal" /></div>
-    <div class="detail-container" :class="{ modalOn: joinModal }">
+    <div class="detail-container" :class="{ modalOn: joinModal, modalOn: resultModal }">
       <h2>
         <span class="point">{{ store.betting?.challengeUser?.name }}</span
         >님이 <span class="point">{{ store.betting?.mission?.content }}</span
