@@ -15,7 +15,7 @@
         </tr>
       </thead>
         
-      <tbody v-if="userStore.notAcceptedList.length != 0">
+      <tbody v-if="loginUserId !== `admin` && userStore.notAcceptedList.length != 0">
         <tr v-for="user in userStore.notAcceptedList" :key="user.id">
           <td>{{user.id}}</td>
           <td>{{user.campus}}</td>
@@ -33,7 +33,7 @@
         </tr>
       </tbody>
 
-      <tbody v-else-if="userStore.loginUser.id === 'admin'">
+      <tbody v-else-if="loginUserId === 'admin' && userStore.juniorAdminList.length !=0">
         <tr v-for="user in userStore.juniorAdminList" :key="user.id">
           <td>{{user.id}}</td>
           <td>{{user.campus}}</td>
@@ -66,7 +66,11 @@ const REST_API_URL = `http://localhost:1219/user`;
 
 import { useUserStore } from '@/stores/user';
 import axios from 'axios';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+
+const loginUserId = ref(sessionStorage.getItem("userId"));
+
+console.log(loginUserId.value)
 
 const userStore = useUserStore();
 onMounted(()=>{

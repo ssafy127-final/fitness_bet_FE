@@ -29,9 +29,7 @@
               <li><RouterLink :to="{ name: 'bettingJoinHistory' }">참여 기록 보기</RouterLink></li>
               <li><RouterLink :to="{ name: 'bettingChallengeHistory' }">챌린지 기록 보기</RouterLink></li>
               <li>
-                <RouterLink :to="{ name: 'awaitList' }" v-if="userStore.loginUser.admin == 1"
-                  >가입 대기 리스트</RouterLink
-                >
+                <RouterLink :to="{ name: 'awaitList' }" v-if="userStore.loginUser.admin == 1">가입 대기 리스트</RouterLink>
               </li>
             </ul>
           </div>
