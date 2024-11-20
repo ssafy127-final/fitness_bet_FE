@@ -46,19 +46,16 @@ export const useUserStore = defineStore("user", () => {
   };
 
   const restoreLogin = () => {
-    const userName = sessionStorage.getItem("userName");
-    if (userName) {
-      loginUser.value = {
-        id : sessionStorage.getItem("userId"),
-        admin: parseInt(sessionStorage.getItem("isAdmin")),
-        name: userName,
-        campus: sessionStorage.getItem("campus"),
-        classNum: parseInt(sessionStorage.getItem("classNum")),
-        gender: parseInt(sessionStorage.getItem("gender")),
-        accept: parseInt(sessionStorage.getItem("accept"))
-      };
-      // 필요한 경우 추가적인 로그인 후 처리를 여기에 구현
-    }
+    const userId = sessionStorage.getItem("userId");
+    console.log("!!!!@@#@!!!!")
+    axios.get(`${REST_API_URL}/autoLogin`, { params : { id : userId} })
+    .then((response)=>{
+      console.log("then")
+      loginUser.value = response.data;
+    }).catch((error)=>{
+      console.error("자동 로그인 실패 : ", error)
+      logout();
+    })
   };
 
   // 우리반의 유저 정보 불러오기 
