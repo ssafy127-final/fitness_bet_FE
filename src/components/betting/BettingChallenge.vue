@@ -108,6 +108,10 @@ header {
 }
 .headerR input {
   margin: 0 3px 0 20px;
+  cursor: pointer;
+}
+.headerR label {
+  cursor: pointer;
 }
 table {
   border-collapse: collapse;

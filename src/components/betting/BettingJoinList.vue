@@ -81,11 +81,15 @@ const select = (id) => {
   if (id === "total") {
     filterBettingJoinList.value = [...store.bettingJoinList]; // 전체 보기
   } else if (id === "success") {
-    filterBettingJoinList.value = store.bettingJoinList.filter((item) => item.betting.result == choice); // 성공배팅
+    filterBettingJoinList.value = store.bettingJoinList.filter((item) => item.betting.result == item.choice); // 성공배팅
   } else if (id === "fail") {
-    filterBettingJoinList.value = store.bettingJoinList.filter((item) => item.betting.result != choice); // 실패배팅
+    filterBettingJoinList.value = store.bettingJoinList.filter(
+      (item) => item.betting.result != item.choice && (item.betting.result == 1 || item.betting.result == -1)
+    ); // 실패배팅
   }
 };
+
+watch(() => select.value);
 </script>
 
 <style scoped>
@@ -113,6 +117,10 @@ header {
 }
 .headerR input {
   margin: 0 3px 0 20px;
+  cursor: pointer;
+}
+.headerR label {
+  cursor: pointer;
 }
 table {
   border-collapse: collapse;
