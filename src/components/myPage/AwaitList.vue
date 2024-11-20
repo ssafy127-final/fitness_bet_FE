@@ -107,7 +107,7 @@ const approve = function(userId){
   background-color: white;
   border: 2px solid #82d4d9;
   height: calc(100vh - 130px - 3rem);
-  margin: 1rem 10rem;
+  margin: 1rem 0;
   border-radius: 10px;
   padding: 2rem;
   overflow: auto;
