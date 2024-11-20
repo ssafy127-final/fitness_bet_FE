@@ -16,7 +16,5 @@ export const useMissionStore = defineStore("mission", () => {
     })
   }
 
-  const newMission = ref({});
-
   return {missionList , getMissionList};
 });

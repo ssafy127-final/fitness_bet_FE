@@ -144,6 +144,7 @@ router.beforeEach((to, from) => {
   if(isAdmin === "0"){
     if(to.name === "awaitList"){ // 가입 대기 리스트로 가면 안돼
       console.log("응 못가")
+      alert("관리자 권한이 필요합니다.")
       return {name : "home"}
     }
   } 

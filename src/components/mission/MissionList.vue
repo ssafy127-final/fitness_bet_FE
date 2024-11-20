@@ -1,7 +1,7 @@
 <template>
     <div class="containerBox">
     <div class="modal" v-show="modalOn">
-      <MissionCreateModal @modal="changeModal" />
+      <MissionCreateModal @modal="changeModal" @reload = "reloadData"/>
     </div>
     <header  :class="{ blur: modalOn }">
       <h3>미션 목록</h3>
@@ -38,7 +38,7 @@
           <td>{{mission.femaleMin}}</td>
           <td>{{mission.femaleMax}}</td> 
           <td v-if="loginUserAdmin == 1"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-            width="30" height="30" viewBox="0,0,256,256" @click = "reject(user.id)">
+            width="30" height="30" viewBox="0,0,256,256" @click = "remove(mission.id)">
 <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="none" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(2,2)"><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="#ffffff" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M64,25c-21.53911,0 -39,17.46089 -39,39c0,21.53911 17.46089,39 39,39c21.53911,0 39,-17.46089 39,-39c0,-21.53911 -17.46089,-39 -39,-39z" fill="#f48884" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M44,84l40,-40M44,44l40,40" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"></path><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="none" stroke="#f48884" stroke-width="6" stroke-linecap="butt"></path></g></g>
 </svg></td>
         </tr>
@@ -60,12 +60,21 @@ import { useMissionStore } from '@/stores/mission';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 import MissionCreateModal from './modal/MissionCreateModal.vue';
+import axios from 'axios';
+
+
+const REST_API_URL = `http://localhost:1219/mission`;
 
 const loginUserAdmin = sessionStorage.getItem("isAdmin");
 const missionStore =  useMissionStore();
 onMounted(()=>{
-    missionStore.getMissionList();
+    reloadData();
 })
+
+const reloadData = function(){
+  missionStore.getMissionList();
+}
+
 const modalOn = ref(false);
 
 const createMission = () => {
@@ -75,6 +84,18 @@ const createMission = () => {
 const changeModal = () => {
   modalOn.value = false;
 };
+
+const remove = (missionId) => {
+  axios.delete(`${REST_API_URL}/${missionId}`)
+  .then((response) =>{
+    console.log(response.data);
+    reloadData();
+  })
+  .catch((error) =>{
+    console.error("미션 삭제 실패 : " , error)
+  })
+
+}
 
 </script>
 
