@@ -11,6 +11,7 @@
               <li><RouterLink :to="{ name: 'finishedBetting' }">종료된 우리반 배팅 보기</RouterLink></li>
               <li><RouterLink :to="{ name: 'bettingJoinHistory' }">참여 기록 보기</RouterLink></li>
               <li><RouterLink :to="{ name: 'bettingChallengeHistory' }">챌린지 기록 보기</RouterLink></li>
+              <li><RouterLink :to="{ name: 'missionList' }">미션 목록 보기</RouterLink></li>
             </ul>
           </div>
 

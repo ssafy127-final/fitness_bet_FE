@@ -23,11 +23,29 @@
           <td>{{user.name}}</td>
           <td><svg 
             xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" 
-            width="100" height="100" viewBox="0,0,256,256" @click = "approve(user.id)">
+            width="50" height="50" viewBox="0,0,256,256" @click = "approve(user.id)">
 <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="none" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(2,2)"><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="#ffffff" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M64,25c-21.53911,0 -39,17.46089 -39,39c0,21.53911 17.46089,39 39,39c21.53911,0 39,-17.46089 39,-39c0,-21.53911 -17.46089,-39 -39,-39z" fill="#82d4d9" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="none" stroke="#82d4d9" stroke-width="6" stroke-linecap="butt"></path><path d="M42,69l13.55,12l30.45,-35" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"></path></g></g>
 </svg></td>
           <td><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-            width="100" height="100" viewBox="0,0,256,256" @click = "reject(user.id)">
+            width="50" height="50" viewBox="0,0,256,256" @click = "reject(user.id)">
+<g fill="none" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="none" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(2,2)"><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="#ffffff" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M64,25c-21.53911,0 -39,17.46089 -39,39c0,21.53911 17.46089,39 39,39c21.53911,0 39,-17.46089 39,-39c0,-21.53911 -17.46089,-39 -39,-39z" fill="#f48884" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M44,84l40,-40M44,44l40,40" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"></path><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="none" stroke="#f48884" stroke-width="6" stroke-linecap="butt"></path></g></g>
+</svg></td> 
+        </tr>
+      </tbody>
+
+      <tbody v-else-if="userStore.loginUser.id === 'admin'">
+        <tr v-for="user in userStore.juniorAdminList" :key="user.id">
+          <td>{{user.id}}</td>
+          <td>{{user.campus}}</td>
+          <td>{{user.classNum}}</td>
+          <td>{{user.name}}</td>
+          <td><svg 
+            xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" 
+            width="50" height="50" viewBox="0,0,256,256" @click = "approve(user.id)">
+<g fill="none" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="none" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(2,2)"><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="#ffffff" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M64,25c-21.53911,0 -39,17.46089 -39,39c0,21.53911 17.46089,39 39,39c21.53911,0 39,-17.46089 39,-39c0,-21.53911 -17.46089,-39 -39,-39z" fill="#82d4d9" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="none" stroke="#82d4d9" stroke-width="6" stroke-linecap="butt"></path><path d="M42,69l13.55,12l30.45,-35" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"></path></g></g>
+</svg></td>
+          <td><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+            width="50" height="50" viewBox="0,0,256,256" @click = "reject(user.id)">
 <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="none" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(2,2)"><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="#ffffff" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M64,25c-21.53911,0 -39,17.46089 -39,39c0,21.53911 17.46089,39 39,39c21.53911,0 39,-17.46089 39,-39c0,-21.53911 -17.46089,-39 -39,-39z" fill="#f48884" stroke="none" stroke-width="1" stroke-linecap="butt"></path><path d="M44,84l40,-40M44,44l40,40" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"></path><path d="M64,16c-26.50967,0 -48,21.49033 -48,48c0,26.50967 21.49033,48 48,48c26.50967,0 48,-21.49033 48,-48c0,-26.50967 -21.49033,-48 -48,-48z" fill="none" stroke="#f48884" stroke-width="6" stroke-linecap="butt"></path></g></g>
 </svg></td> 
         </tr>
@@ -88,10 +106,11 @@ const approve = function(userId){
 .containerBox {
   background-color: white;
   border: 2px solid #82d4d9;
-  height: calc(100vh - 130px - 2rem);
-  margin: 0 10rem;
+  height: calc(100vh - 130px - 3rem);
+  margin: 1rem 10rem;
   border-radius: 10px;
   padding: 2rem;
+  overflow: auto;
 }
 h3 {
   font-size: 24px;
@@ -105,6 +124,8 @@ header {
 
 table {
   border-collapse: collapse;
+  text-align: center;
+
 }
 
 tr,
@@ -116,4 +137,8 @@ th {
 .no-data {
   text-align: center;
 }
+svg{
+  cursor: pointer;
+}
+
 </style>

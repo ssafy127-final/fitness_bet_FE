@@ -36,7 +36,7 @@ export const useUserStore = defineStore("user", () => {
 
   const logout = function(){
     axios.post(`${REST_API_URL}/logout`)
-    .then(() =>{
+    .then((response) =>{
       sessionStorage.clear();
       loginUser.value = null;
       router.push({ name : "login"})
@@ -70,6 +70,9 @@ export const useUserStore = defineStore("user", () => {
       console.log(response.data)
       userList.value = response.data;
       getNotAcceptedList();
+      if(loginUser.value.id ==='admin'){
+        getJuniorAdminList();
+      }
     })
   }
 
@@ -80,23 +83,16 @@ export const useUserStore = defineStore("user", () => {
     console.log(notAcceptedList.value)
   }
 
-  const approve = function(userId){
-    axios.patch(`${REST_API_URL}/approve/${userId}`)
-    .then((response)=>{
-      console.log(response);
-      console.log(notAcceptedList.value)
-      
-    })
+  const juniorAdminList = ref([]);
+
+  const getJuniorAdminList = function() {
+    if (!userList.value) {
+      console.error("userList.value is not defined or loaded yet.");
+      return; // 함수를 여기서 종료
+    }
+    juniorAdminList.value = userList.value.filter(user => user && user.admin === 1 && user.accept === 0);
+    console.log(juniorAdminList.value);
   }
-
-  const reject = function(userId){
-    axios.delete(`${REST_API_URL}/delete/${userId}`)
-    .then((response) =>{
-      console.log(response);
-    })
-  }
-
-
-  return { loginUser, login, restoreLogin, logout, userList, getUserList, notAcceptedList, getNotAcceptedList
+  return { loginUser, login, restoreLogin, logout, userList, getUserList, notAcceptedList, getNotAcceptedList,juniorAdminList ,getJuniorAdminList
   };
 });

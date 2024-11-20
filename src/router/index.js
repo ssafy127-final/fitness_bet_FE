@@ -5,6 +5,7 @@ import BettingFinishedList from "@/components/betting/BettingFinishedList.vue";
 import BettingJoinList from "@/components/betting/BettingJoinList.vue";
 import BettingList from "@/components/betting/BettingList.vue";
 import LoginRegistForm from "@/components/login/LoginRegistForm.vue";
+import MissionList from "@/components/mission/MissionList.vue";
 import AwaitList from "@/components/myPage/AwaitList.vue";
 import MyInfo from "@/components/myPage/MyInfo.vue";
 import MyPoint from "@/components/myPage/MyPoint.vue";
@@ -35,6 +36,13 @@ const router = createRouter({
       path: "/mission",
       name: "mission",
       component: MissionView,
+      children: [
+        {
+          path : "",
+          name : "missionList",
+          component : MissionList
+        }
+      ]
     },
     {
       path: "/betting",
@@ -132,13 +140,13 @@ router.beforeEach((to, from) => {
       return { name: "home" };
     }
   }
-
+  // 어드민이 아닌데
   if(isAdmin === "0"){
-    if(to.name === "awaitList"){
+    if(to.name === "awaitList"){ // 가입 대기 리스트로 가면 안돼
       console.log("응 못가")
       return {name : "home"}
     }
-}
+  } 
 }
 );
 
