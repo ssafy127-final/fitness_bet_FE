@@ -202,7 +202,7 @@ const finishing = () => {
       .put(`${store.REST_API_URL}/${route.params.id}/stop`)
       .then((res) => {
         if (res.status == 200) {
-          store.getDetailFromBack(route.params.id);
+          store.getDetailFromBack(route.params.id, userStore.loginUser.id);
           store.getList(userStore.loginUser.id);
         }
       })

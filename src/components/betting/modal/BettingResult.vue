@@ -42,7 +42,7 @@ const submitResult = () => {
         .put(`${store.REST_API_URL}/${route.params.id}/finish`, { result: choice.value })
         .then((res) => {
           if (res.status == 200) {
-            store.getDetailFromBack(route.params.id);
+            store.getDetailFromBack(route.params.id, userStore.loginUser.id);
             store.getList(userStore.loginUser.id);
             store.getFinishedList(userStore.loginUser.id);
           }

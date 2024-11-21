@@ -1,7 +1,12 @@
 <template>
   <div class="container" :class="{ 'finished-container': props.finished }">
     <div class="content">
-      <p class="checkJoin info" v-if="props.betting.history?.player == userStore.loginUser.id">참여완료</p>
+      <p
+        class="checkJoin info"
+        v-if="props.betting.history != null && props.betting.history.player == userStore.loginUser.id"
+      >
+        참여완료
+      </p>
       <div class="finished info">
         <p v-if="props.betting.result == 2">배팅마감</p>
       </div>
@@ -35,11 +40,16 @@
 import router from "@/router";
 import BettingProgressBar from "./BettingProgressBar.vue";
 import { useUserStore } from "@/stores/user";
+import { onBeforeMount, onMounted } from "vue";
+import { useBettingStore } from "@/stores/betting";
 const userStore = useUserStore();
-
+const bettingStore = useBettingStore();
 const props = defineProps({
   betting: Object,
   finished: Boolean,
+});
+onBeforeMount(() => {
+  console.log(props.betting.history);
 });
 </script>
 

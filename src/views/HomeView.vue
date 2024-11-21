@@ -5,7 +5,10 @@
         <span class="point">{{ userStore.loginUser.name }}</span
         >님, <br />환영합니다.
       </h4>
-      <div v-if="userStore.loginUser.visited < moment().format('YYYY-MM-DD')" class="notIn">
+      <div
+        v-if="userStore.loginUser.visited < moment().format('YYYY-MM-DD') || !userStore.loginUser.visited"
+        class="notIn"
+      >
         <p>출석</p>
         <p>하기</p>
       </div>
@@ -90,15 +93,15 @@ onMounted(() => {
 }
 .welcome {
   background-color: #d6e4f0;
-  padding: 20px;
+  padding: 30px;
   position: relative;
 }
 .welcome h4 {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 500;
 }
 .welcome .point {
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 600;
 }
 .welcome div {
