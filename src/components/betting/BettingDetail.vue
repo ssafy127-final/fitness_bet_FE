@@ -34,7 +34,8 @@
               }
             "
           />
-          <button @click="createReview">등록</button>
+          <button @click="createReview" v-show="!modifyMode">등록</button>
+          <button @click="createReview" v-show="modifyMode">수정</button>
         </div>
         <ul class="review-content">
           <li v-for="review in store.reviewList" :key="review.id">
@@ -178,6 +179,7 @@ const deleteReview = (reviewId) => {
       .then((res) => {
         if (res.status == 200) {
           store.getReviewList(route.params.id, userId);
+          modifyMode.value = "";
         }
       })
       .catch((err) => console.log(err));
@@ -291,7 +293,7 @@ input::placeholder {
 .review-content li {
   border-bottom: 1px solid #d8d6d6;
   display: grid;
-  grid-template-columns: 60px 1fr 18px 18px;
+  grid-template-columns: 80px 1fr 18px 18px;
   text-align: start;
   padding: 5px 0;
 }

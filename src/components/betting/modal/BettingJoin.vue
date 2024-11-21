@@ -95,20 +95,22 @@ const joinBetting = () => {
   if (choice.value == 0) {
     alert("가능 또는 불가능을 선택해주세요.");
   } else {
-    axios
-      .put(`${store.REST_API_URL}/${route.params.id}`, {
-        player: userStore.loginUser.id,
-        point: point.value,
-        choice: choice.value,
-      })
-      .then((res) => {
-        if (res.status == 200) {
-          store.getDetailFromBack(route.params.id);
-          store.getList(userStore.loginUser.id);
-        }
-      })
-      .then(() => emit("modalOff"))
-      .catch((err) => console.log(err));
+    if (confirm("배팅하시겠습니까? 한번 배팅한 후엔 취소하거나 재배팅이 불가합니다.")) {
+      axios
+        .put(`${store.REST_API_URL}/${route.params.id}`, {
+          player: userStore.loginUser.id,
+          point: point.value,
+          choice: choice.value,
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            store.getDetailFromBack(route.params.id);
+            store.getList(userStore.loginUser.id);
+          }
+        })
+        .then(() => emit("modalOff"))
+        .catch((err) => console.log(err));
+    }
   }
 };
 </script>

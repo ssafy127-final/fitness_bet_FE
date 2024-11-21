@@ -49,7 +49,6 @@
         <li v-for="betting in bettingStore.bettingList" :key="betting.id" class="bet-item">
           <p>
             {{ betting.challengeUser.name }}님이 {{ betting.mission.content }}를(을) {{ betting.missionCnt }}개(초 안에)
-            가능?
           </p>
           <p @click="router.push({ path: `/betting/${betting.id}` })">보러가기 -></p>
         </li>
@@ -66,14 +65,16 @@ import router from "@/router";
 import { useBettingStore } from "@/stores/betting";
 import { useUserStore } from "@/stores/user";
 import moment from "moment";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 
 const userStore = useUserStore();
 const bettingStore = useBettingStore();
 console.log();
 onMounted(() => {
   bettingStore.getList(userStore.loginUser.id);
+  userStore.restoreLogin();
 });
+// watch(() => userStore.loginUser);
 </script>
 
 <style scoped>
