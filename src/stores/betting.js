@@ -1,6 +1,7 @@
 import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
+import router from "@/router";
 
 export const useBettingStore = defineStore("betting", () => {
   const REST_API_URL = `http://localhost:1219/betting`;
@@ -41,7 +42,6 @@ export const useBettingStore = defineStore("betting", () => {
       })
       .then(() => {
         getList(userId);
-        router.push({ path: "/betting" });
       })
       .catch((err) => console.log(err));
   };

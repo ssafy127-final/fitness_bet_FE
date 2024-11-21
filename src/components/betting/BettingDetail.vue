@@ -217,7 +217,7 @@ const closeResultModal = () => {
 };
 const joinBetting = () => {
   if (userStore.loginUser.currentPoint >= 10) {
-    joinModal = true;
+    joinModal.value = true;
   } else {
     alert("보유 포인트가 참여 가능한 포인트보다 적습니다.");
   }
