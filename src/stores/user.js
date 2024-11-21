@@ -52,6 +52,7 @@ export const useUserStore = defineStore("user", () => {
     .then((response)=>{
       console.log("then")
       loginUser.value = response.data;
+      console.log(loginUser.value);
     }).catch((error)=>{
       console.error("자동 로그인 실패 : ", error)
       logout();
