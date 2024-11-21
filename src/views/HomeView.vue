@@ -7,7 +7,7 @@
       </h4>
       <div
         v-if="userStore.loginUser.visited < moment().format('YYYY-MM-DD') || !userStore.loginUser.visited"
-        class="notIn"
+        class="notIn" @click = "dailyCheck"
       >
         <p>출석</p>
         <p>하기</p>
@@ -67,6 +67,7 @@
 import router from "@/router";
 import { useBettingStore } from "@/stores/betting";
 import { useUserStore } from "@/stores/user";
+import axios from "axios";
 import moment from "moment";
 import { onMounted, watch } from "vue";
 
@@ -78,6 +79,20 @@ onMounted(() => {
   userStore.restoreLogin();
 });
 // watch(() => userStore.loginUser);
+const REST_API_URL = "http://localhost:1219/user";
+
+
+const dailyCheck = () =>{
+  userStore.restoreLogin();
+  console.log(typeof userStore.loginUser.id);
+  axios.post(`${REST_API_URL}/daily`, null, { params : { id : userStore.loginUser.id}})
+  .then(() =>{
+    userStore.restoreLogin();
+  }).catch((error) =>{
+    console.error("에러!!! " ,error);
+  })
+}
+
 </script>
 
 <style scoped>
