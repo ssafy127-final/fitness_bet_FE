@@ -41,15 +41,7 @@
             }}
           </td>
           <td>
-            {{
-              history.betting.result == history.choice
-                ? (history.betting.successPoint + history.betting.failPoint) /
-                    (history.choice == 1
-                      ? history.betting.successPoint / history.point
-                      : history.betting.failPoint / history.point) +
-                  " Point"
-                : "-"
-            }}
+            {{ history.betting.result == history.choice ? history.prize + " Point" : "-" }}
           </td>
         </tr>
       </tbody>

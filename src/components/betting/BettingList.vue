@@ -48,7 +48,9 @@ const select = (id) => {
   } else if (id === "canJoin") {
     filterBettingList.value = list.filter((item) => !item.history || item.history === null); // 참여 가능 보기
   } else if (id === "alreadyJoin") {
-    filterBettingList.value = list.filter((item) => item.history != null); // 참여한 리스트 보기
+    filterBettingList.value = list.filter(
+      (item) => item.history != null && item.history.player != userStore.loginUser.id
+    ); // 참여한 리스트 보기
   }
 };
 onMounted(() => {

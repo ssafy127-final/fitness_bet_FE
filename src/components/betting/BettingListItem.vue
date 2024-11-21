@@ -1,7 +1,7 @@
 <template>
   <div class="container" :class="{ 'finished-container': props.finished }">
     <div class="content">
-      <p class="checkJoin info" v-if="props.betting.history">참여완료</p>
+      <p class="checkJoin info" v-if="props.betting.history.player == userStore.loginUser.id">참여완료</p>
       <div class="finished info">
         <p v-if="props.betting.result == 2">배팅마감</p>
       </div>

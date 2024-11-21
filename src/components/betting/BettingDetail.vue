@@ -99,7 +99,7 @@
             !store.betting.history &&
             store.betting.challengeUser.id != userStore.loginUser.id
           "
-          @click="joinModal = true"
+          @click="joinBetting"
         >
           배팅참여
         </button>
@@ -214,6 +214,13 @@ const setResultBtn = () => {
 };
 const closeResultModal = () => {
   resultModal.value = false;
+};
+const joinBetting = () => {
+  if (userStore.loginUser.currentPoint >= 10) {
+    joinModal = true;
+  } else {
+    alert("보유 포인트가 참여 가능한 포인트보다 적습니다.");
+  }
 };
 </script>
 

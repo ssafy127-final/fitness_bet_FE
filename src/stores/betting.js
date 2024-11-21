@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
@@ -85,6 +85,27 @@ export const useBettingStore = defineStore("betting", () => {
       .then((res) => (bettingChallengeList.value = res.data))
       .catch((err) => console.log(err));
   };
+  watch(
+    () => sessionStorage.getItem("userId"),
+    (newId) => {
+      if (!newId) {
+        bettingList.value = [];
+        bettingChallengeList.value = [];
+        finishedList.value = [];
+        betting.value = {
+          challengeUser: { name: null },
+          mission: { content: null },
+          missionCnt: 0,
+          failCnt: 0,
+          successCnt: 0,
+          history: null,
+          result: 0,
+        };
+        reviewList.value = [{ id: null, writer: null, content: null }];
+        bettingJoinList.value = [];
+      }
+    }
+  );
 
   return {
     REST_API_URL,
