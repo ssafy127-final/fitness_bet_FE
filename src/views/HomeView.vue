@@ -7,7 +7,8 @@
       </h4>
       <div
         v-if="userStore.loginUser.visited < moment().format('YYYY-MM-DD') || !userStore.loginUser.visited"
-        class="notIn" @click = "dailyCheck"
+        class="notIn"
+        @click="dailyCheck"
       >
         <p>출석</p>
         <p>하기</p>
@@ -78,21 +79,22 @@ onMounted(() => {
   bettingStore.getList(userStore.loginUser.id);
   userStore.restoreLogin();
 });
-// watch(() => userStore.loginUser);
+console.log(bettingStore.bettingList);
+watch(() => userStore.loginUser);
 const REST_API_URL = "http://localhost:1219/user";
 
-
-const dailyCheck = () =>{
+const dailyCheck = () => {
   userStore.restoreLogin();
   console.log(typeof userStore.loginUser.id);
-  axios.post(`${REST_API_URL}/daily`, null, { params : { id : userStore.loginUser.id}})
-  .then(() =>{
-    userStore.restoreLogin();
-  }).catch((error) =>{
-    console.error("에러!!! " ,error);
-  })
-}
-
+  axios
+    .post(`${REST_API_URL}/daily`, null, { params: { id: userStore.loginUser.id } })
+    .then(() => {
+      userStore.restoreLogin();
+    })
+    .catch((error) => {
+      console.error("에러!!! ", error);
+    });
+};
 </script>
 
 <style scoped>

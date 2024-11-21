@@ -107,6 +107,17 @@ export const useBettingStore = defineStore("betting", () => {
       }
     }
   );
+  watch(
+    () => sessionStorage.getItem("userId"),
+    (newId) => {
+      if (newId) {
+        getList(newId);
+        getFinishedList(newId);
+        getJoinList(newId);
+        getChallengeList(newId);
+      }
+    }
+  );
 
   return {
     REST_API_URL,
