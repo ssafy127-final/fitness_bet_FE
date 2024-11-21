@@ -12,7 +12,7 @@ export const useBettingStore = defineStore("betting", () => {
     missionCnt: 0,
     failCnt: 0,
     successCnt: 0,
-    history: null,
+    history: { player: null },
     result: 0,
   });
   const reviewList = ref([{ id: null, writer: null, content: null }]);
@@ -21,15 +21,16 @@ export const useBettingStore = defineStore("betting", () => {
     axios
       .get(REST_API_URL, { params: { userId } })
       .then((res) => (bettingList.value = res.data))
+      .then(() => console.log(bettingList.value))
       .catch((err) => console.log(err));
   };
 
   const getBettingDetail = (id) => {
     betting.value = bettingList.value.find((item) => item.id == id);
   };
-  const getDetailFromBack = (bettingId) => {
+  const getDetailFromBack = (bettingId, userId) => {
     axios
-      .get(`${REST_API_URL}/detail/${bettingId}`)
+      .get(`${REST_API_URL}/detail/${bettingId}`, { params: { id: userId } })
       .then((res) => (betting.value = res.data))
       .catch((err) => console.log(err));
   };
