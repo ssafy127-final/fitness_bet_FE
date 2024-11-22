@@ -72,6 +72,13 @@ onMounted(() => {
   select("total");
 });
 const select = (id) => {
+  if (selected.value === id) {
+    // 이미 선택된 체크박스를 클릭하면 상태를 강제로 유지
+    setTimeout(() => {
+      const checkbox = document.getElementById(id);
+      if (checkbox) checkbox.checked = true;
+    }, 0);
+  }
   selected.value = id;
   if (id === "total") {
     filterBettingChallengeList.value = [...store.bettingChallengeList]; // 전체 보기
