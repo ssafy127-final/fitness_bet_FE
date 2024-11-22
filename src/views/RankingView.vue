@@ -7,15 +7,15 @@
         </div>
         <div class="headerR">
           <div class="checkbox-group">
-            <input type="checkbox" id="winRate" />
+            <input type="checkbox" id="winRate" v-model="isWinRateSelected"/>
             <label for="winRate">승률</label>
           </div>
           <div class="checkbox-group">
-            <input type="checkbox" id="currentPoints" />
+            <input type="checkbox" id="currentPoints" v-model="isCurrentPointSelected" />
             <label for="currentPoints">현재 포인트</label>
           </div>
           <div class="checkbox-group">
-            <input type="checkbox" id="totalPoints" />
+            <input type="checkbox" id="totalPoints" v-model="isTotalPointSelected" />
             <label for="totalPoints">누적 포인트</label>
           </div>
         </div>
@@ -57,27 +57,30 @@
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 const REST_API_URL = `http://localhost:1219/user`;
 
-const selected = ref("total");
 const rankingList = ref([]);
-const filterRankingList = ref([]);
+const isWinRateSelected = ref(false);
+const isCurrentPointSelected = ref(false);
+const isTotalPointSelected = ref(false);
 const loginUserId = sessionStorage.getItem("userId");
 
 const getRankingList = function (userId) {
   axios
     .get(`${REST_API_URL}/ranking`, { params: { userId } })
     .then((response) => {
-      rankingList.value = response.data;
-      console.log(response.data);
+        rankingList.value = response.data.map(user => ({
+        ...user,
+        winRate: calculateWinRate(user)
+    }));
+    console.log(response.data);
     })
     .catch((error) => {
       console.error("에러 ::", error);
     });
 };
-
 onMounted(() => {
   getRankingList(loginUserId); // 전체 리스트
 });
@@ -87,18 +90,42 @@ const calculateWinRate = (user) => {
   return ((user.winGames / user.totalGames) * 100).toFixed(2) + "%";
 };
 
-const select = (id) => {
-  selected.value = id;
-  if (id === "winRate") {
-    filterBettingList.value = list; // 승률 순
-  } else if (id === "currentPoints") {
-    filterBettingList.value = list.filter((item) => !item.history || item.history === null); // 참여 가능 보기
-  } else if (id === "totalPoints") {
-    filterBettingList.value = list.filter(
-      (item) => item.history != null && item.history.player != userStore.loginUser.id
-    ); // 참여한 리스트 보기
-  }
+const sortByWinRate = () => {
+    rankingList.value.sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
 };
+
+watch(isWinRateSelected, (newValue) => {
+    if (newValue) {
+        sortByWinRate();
+        isCurrentPointSelected.value = false;
+        isTotalPointSelected.value= false;
+    }
+});
+
+const sortByCurrentPoint = () => {
+    rankingList.value.sort((a,b) => b.currentPoint - a.currentPoint);
+}
+
+watch(isCurrentPointSelected, (newValue) => {
+    if (newValue) {
+        sortByCurrentPoint();
+        isWinRateSelected.value=false;
+        isTotalPointSelected.value=false;
+    }
+});
+
+const sortByTotalPoint = () => {
+    rankingList.value.sort((a,b) => b.totalPoint - a.totalPoint);
+}
+
+watch(isTotalPointSelected, (newValue) => {
+    if (newValue) {
+        sortByTotalPoint();
+        isWinRateSelected.value = false;
+        isCurrentPointSelected.value = false;
+    }
+});
+
 </script>
 
 <style scoped>
@@ -113,7 +140,6 @@ const select = (id) => {
   margin: 0 auto;
   border-radius: 10px;
   padding: 2rem;
-  overflow: auto;
   width: 70%;
 }
 
