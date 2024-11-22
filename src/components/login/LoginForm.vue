@@ -12,13 +12,13 @@
         </div>
 
         <div class="login-form-password">
-          <label for="password" class="input-label">비밀번호 </label>
+          <label for="password" class="input-label" >비밀번호 </label>
           <input
             type="password"
             v-model="loginPassword"
             name="password"
             class="login-input"
-            placeholder="비밀번호를 입력하세요"
+            placeholder="비밀번호를 입력하세요" @keyup.enter="login"
           />
         </div>
       </div>
