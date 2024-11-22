@@ -8,7 +8,7 @@
       <div class="input-box">
         <div class="login-form-id">
           <label for="userId" class="input-label">아이디 </label>
-          <input type="text" v-model="loginId" name="userId" class="login-input" placeholder="ID를 입력하세요" />
+          <input type="text" v-model="loginId" name="userId" class="login-input" placeholder="ID를 입력하세요" @keyup.enter="login" required/>
         </div>
 
         <div class="login-form-password">
@@ -19,6 +19,7 @@
             name="password"
             class="login-input"
             placeholder="비밀번호를 입력하세요" @keyup.enter="login"
+            required
           />
         </div>
       </div>
@@ -34,7 +35,6 @@
 <script setup>
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
-import axios from "axios";
 import { ref } from "vue";
 
 const REST_API_URL = "http://localhost:1219/user";
