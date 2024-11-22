@@ -60,7 +60,9 @@
             {{ betting.challengeUser.name }}님이 {{ betting.mission.content }}를(을) {{ betting.missionCnt }}개(초 안에)
           </p>
           <div class="gotosee">
-            <p>{{ betting.successCnt ? betting.successCnt : 0 + betting.failCnt ? betting.failCnt : 0 }} 명 참여중</p>
+            <p>
+              {{ (betting.successCnt ? betting.successCnt : 0) + (betting.failCnt ? betting.failCnt : 0) }} 명 참여중
+            </p>
             <p>상세보기 -></p>
           </div>
         </li>

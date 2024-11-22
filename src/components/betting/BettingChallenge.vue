@@ -12,48 +12,50 @@
         <label for="fail">실패 기록 보기</label>
       </div>
     </header>
-    <table width="100%">
-      <thead>
-        <tr>
-          <th width="15%">날짜</th>
-          <th width="50%">항목</th>
-          <th width="25%">배팅비율</th>
-          <th width="10%">결과</th>
-        </tr>
-      </thead>
-      <tbody v-if="filterBettingChallengeList.length != 0">
-        <tr v-for="(betting, idx) in filterBettingChallengeList" :key="betting.id">
-          <td>{{ betting.regDate }}</td>
-          <td style="text-align: left">
-            {{ betting.challengeUser.name }}님이 {{ betting.mission.content }}을(를) {{ betting.mission_cnt }}회(초
-            안에) 도전
-          </td>
-          <td class="per">
-            <p>
-              가능<br />{{
-                betting.successCnt + betting.failCnt == 0
-                  ? 0
-                  : ((betting.successCnt / (betting.successCnt + betting.failCnt)) * 100).toFixed(0)
-              }}%
-            </p>
-            <p>vs</p>
-            <p>
-              불가능<br />{{
-                betting.successCnt + betting.failCnt == 0
-                  ? 0
-                  : ((betting.failCnt / (betting.successCnt + betting.failCnt)) * 100).toFixed(0)
-              }}%
-            </p>
-          </td>
-          <td>{{ betting.result == 1 ? "성공" : "실패" }}</td>
-        </tr>
-      </tbody>
-      <tbody v-else>
-        <tr class="no-data">
-          <td colspan="4">데이터가 없습니다.</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table width="100%">
+        <thead>
+          <tr>
+            <th width="15%">날짜</th>
+            <th width="50%">항목</th>
+            <th width="25%">배팅비율</th>
+            <th width="10%">결과</th>
+          </tr>
+        </thead>
+        <tbody v-if="filterBettingChallengeList.length != 0">
+          <tr v-for="(betting, idx) in filterBettingChallengeList" :key="betting.id">
+            <td>{{ betting.regDate }}</td>
+            <td style="text-align: left">
+              {{ betting.challengeUser.name }}님이 {{ betting.mission.content }}을(를) {{ betting.mission_cnt }}회(초
+              안에) 도전
+            </td>
+            <td class="per">
+              <p>
+                가능<br />{{
+                  betting.successCnt + betting.failCnt == 0
+                    ? 0
+                    : ((betting.successCnt / (betting.successCnt + betting.failCnt)) * 100).toFixed(0)
+                }}%
+              </p>
+              <p>vs</p>
+              <p>
+                불가능<br />{{
+                  betting.successCnt + betting.failCnt == 0
+                    ? 0
+                    : ((betting.failCnt / (betting.successCnt + betting.failCnt)) * 100).toFixed(0)
+                }}%
+              </p>
+            </td>
+            <td>{{ betting.result == 1 ? "성공" : "실패" }}</td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr class="no-data">
+            <td colspan="4">데이터가 없습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -99,6 +101,10 @@ const select = (id) => {
   border-radius: 10px;
   padding: 2rem;
 }
+.table-container {
+  overflow-y: auto;
+  max-height: calc(100vh - 130px - 9rem);
+}
 h3 {
   font-size: 24px;
 }
@@ -128,6 +134,11 @@ tr,
 th {
   border-bottom: 1.5px solid #7b7a7a;
   padding: 0.5rem 0;
+}
+th {
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 td {
   padding: 0.5rem 0;

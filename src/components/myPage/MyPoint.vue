@@ -12,37 +12,39 @@
         <label for="minus">사용 내역 보기</label>
       </div>
     </header>
-    <table width="100%">
-      <thead>
-        <tr>
-          <th width="10%">구분</th>
-          <th width="45%">내용</th>
-          <th width="15%">적립</th>
-          <th width="15%">사용</th>
-          <th width="15%">날짜</th>
-        </tr>
-      </thead>
-      <tbody v-if="filterList.length != 0">
-        <tr v-for="(history, idx) in filterList" :key="history.id">
-          <td v-if="history.category == 0"><span class="label daily">출석</span></td>
-          <td v-if="history.category == 0" class="desc">출석 체크 포인트 획득</td>
-          <td v-if="history.category == 3"><span class="label product">상품</span></td>
-          <td v-if="history.category == 3" class="desc">상품 교환으로 인한 포인트 사용</td>
-          <td v-if="history.category == 1"><span class="label betting">배팅</span></td>
-          <td v-if="history.category == 1" class="desc">배팅 성공으로 인한 포인트 획득</td>
-          <td v-if="history.category == 2"><span class="label betting">배팅</span></td>
-          <td v-if="history.category == 2" class="desc">배팅 참여 포인트 사용</td>
-          <td>{{ history.point > 0 ? history.point + " Point" : "-" }}</td>
-          <td>{{ history.point < 0 ? history.point + " Point" : "-" }}</td>
-          <td>{{ history.recordDate }}</td>
-        </tr>
-      </tbody>
-      <tbody v-else>
-        <tr class="no-data">
-          <td colspan="6">데이터가 없습니다.</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table width="100%">
+        <thead>
+          <tr>
+            <th width="10%">구분</th>
+            <th width="45%">내용</th>
+            <th width="15%">적립</th>
+            <th width="15%">사용</th>
+            <th width="15%">날짜</th>
+          </tr>
+        </thead>
+        <tbody v-if="filterList.length != 0">
+          <tr v-for="(history, idx) in filterList" :key="history.id">
+            <td v-if="history.category == 0"><span class="label daily">출석</span></td>
+            <td v-if="history.category == 0" class="desc">출석 체크 포인트 획득</td>
+            <td v-if="history.category == 3"><span class="label product">상품</span></td>
+            <td v-if="history.category == 3" class="desc">상품 교환으로 인한 포인트 사용</td>
+            <td v-if="history.category == 1"><span class="label betting">배팅</span></td>
+            <td v-if="history.category == 1" class="desc">배팅 성공으로 인한 포인트 획득</td>
+            <td v-if="history.category == 2"><span class="label betting">배팅</span></td>
+            <td v-if="history.category == 2" class="desc">배팅 참여 포인트 사용</td>
+            <td>{{ history.point > 0 ? history.point + " Point" : "-" }}</td>
+            <td>{{ history.point < 0 ? history.point + " Point" : "-" }}</td>
+            <td>{{ history.recordDate }}</td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr class="no-data">
+            <td colspan="6">데이터가 없습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -115,6 +117,10 @@ watch(
   border-radius: 10px;
   padding: 2rem;
 }
+.table-container {
+  overflow-y: auto;
+  max-height: calc(100vh - 130px - 9rem);
+}
 h3 {
   font-size: 24px;
 }
@@ -145,6 +151,11 @@ td,
 th {
   border-bottom: 1.5px solid #7b7a7a;
   padding: 0.5rem 0;
+}
+th {
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 td {
   padding: 1rem 0;

@@ -112,7 +112,7 @@ header {
   background-color: #fff;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-  z-index: 1;
+  z-index: 111;
   list-style-type: none;
   padding: 0;
   margin: 0;
