@@ -12,45 +12,47 @@
         <label for="fail">실패 배팅 보기</label>
       </div>
     </header>
-    <table width="100%">
-      <thead>
-        <tr>
-          <th width="15%">날짜</th>
-          <th width="37%">항목</th>
-          <th width="8%">선택</th>
-          <th width="10%">배팅 포인트</th>
-          <th width="10%">결과</th>
-          <th width="10%">획득 포인트</th>
-        </tr>
-      </thead>
-      <tbody v-if="filterBettingJoinList.length != 0">
-        <tr v-for="(history, idx) in filterBettingJoinList" :key="history.id">
-          <td>{{ history.betting.regDate }}</td>
-          <td style="text-align: left">{{ history.betting.mission.content }}</td>
-          <td>{{ history.choice == 1 ? "가능" : "불가능" }}</td>
-          <td>{{ history.point }} Point</td>
-          <td>
-            {{
-              history.betting.result == 0
-                ? "진행중"
-                : history.betting.result == 2
-                ? "결과입력중"
-                : history.betting.result == history.choice
-                ? "승"
-                : "패"
-            }}
-          </td>
-          <td>
-            {{ history.betting.result == history.choice ? history.prize + " Point" : "-" }}
-          </td>
-        </tr>
-      </tbody>
-      <tbody v-else>
-        <tr class="no-data">
-          <td colspan="6">데이터가 없습니다.</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table width="100%">
+        <thead>
+          <tr>
+            <th width="15%">날짜</th>
+            <th width="37%">항목</th>
+            <th width="8%">선택</th>
+            <th width="10%">배팅 포인트</th>
+            <th width="10%">결과</th>
+            <th width="10%">획득 포인트</th>
+          </tr>
+        </thead>
+        <tbody v-if="filterBettingJoinList.length != 0">
+          <tr v-for="(history, idx) in filterBettingJoinList" :key="history.id">
+            <td>{{ history.betting.regDate }}</td>
+            <td style="text-align: left">{{ history.betting.mission.content }}</td>
+            <td>{{ history.choice == 1 ? "가능" : "불가능" }}</td>
+            <td>{{ history.point }} Point</td>
+            <td>
+              {{
+                history.betting.result == 0
+                  ? "진행중"
+                  : history.betting.result == 2
+                  ? "결과입력중"
+                  : history.betting.result == history.choice
+                  ? "승"
+                  : "패"
+              }}
+            </td>
+            <td>
+              {{ history.betting.result == history.choice ? history.prize + " Point" : "-" }}
+            </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr class="no-data">
+            <td colspan="6">데이터가 없습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -100,6 +102,7 @@ watch(() => select.value);
   border-radius: 10px;
   padding: 2rem;
 }
+
 h3 {
   font-size: 24px;
 }
@@ -121,6 +124,15 @@ header {
 .headerR label {
   cursor: pointer;
 }
+.table-container {
+  overflow-y: auto;
+  max-height: calc(100vh - 130px - 9rem);
+}
+th {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
 table {
   border-collapse: collapse;
   text-align: center;
@@ -131,6 +143,7 @@ th {
   border-bottom: 1.5px solid #7b7a7a;
   padding: 0.5rem 0;
 }
+
 td {
   padding: 1rem 0;
 }
