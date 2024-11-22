@@ -19,6 +19,9 @@
     </header>
     <div class="content" :class="{ blur: modalOn }">
       <BettingListItem v-for="item in filterBettingList" :key="item.id" :betting="item" />
+      <div v-if="filterBettingList.length == 0" style="text-align: center; margin-top: 2.5rem">
+        현재 진행중인 배팅이 없습니다.
+      </div>
     </div>
   </div>
 </template>
@@ -122,7 +125,7 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: 450px;
+  max-height: calc(100vh - 220px);
   overflow-y: auto;
 }
 </style>

@@ -5,6 +5,9 @@
     </header>
     <div class="content">
       <BettingListItem v-for="item in store.finishedList" :key="item.id" :betting="item" finished="true" />
+      <div v-if="store.finishedList.length == 0" style="text-align: center; margin-top: 2.5rem">
+        종료된 배팅이 없습니다.
+      </div>
     </div>
   </div>
 </template>
@@ -51,7 +54,7 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: 450px;
+  max-height: calc(100vh - 220px);
   overflow-y: auto;
 }
 </style>

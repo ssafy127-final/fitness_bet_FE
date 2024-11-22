@@ -24,17 +24,14 @@
       </thead>
       <tbody v-if="filterList.length != 0">
         <tr v-for="(history, idx) in filterList" :key="history.id">
-          <td v-if="history.category == 0">출석</td>
-          <td v-if="history.category == 0" style="text-align: left">출석 체크 포인트 획득</td>
-          <td v-if="history.category == 3">상품</td>
-          <td v-if="history.category == 3" style="text-align: left">상품 교환으로 인한 포인트 사용</td>
-          <td v-if="history.category == 1">배팅</td>
-          <td v-if="history.category == 1" style="text-align: left">배팅 성공으로 인한 포인트 획득</td>
-          <td v-if="history.category == 2">배팅</td>
-          <td v-if="history.category == 2" style="text-align: left">배팅 참여 포인트 사용</td>
-
-          <!-- <td>{{ history.category == 0 ? "출석" : history.category == 3 ? "상품" : "배팅" }}</td>
-            <td>{{ history.category == 0 ? "출석체크" : history.category == 3 ? "상품" : "배팅" }}</td> -->
+          <td v-if="history.category == 0"><span class="label daily">출석</span></td>
+          <td v-if="history.category == 0" class="desc">출석 체크 포인트 획득</td>
+          <td v-if="history.category == 3"><span class="label product">상품</span></td>
+          <td v-if="history.category == 3" class="desc">상품 교환으로 인한 포인트 사용</td>
+          <td v-if="history.category == 1"><span class="label betting">배팅</span></td>
+          <td v-if="history.category == 1" class="desc">배팅 성공으로 인한 포인트 획득</td>
+          <td v-if="history.category == 2"><span class="label betting">배팅</span></td>
+          <td v-if="history.category == 2" class="desc">배팅 참여 포인트 사용</td>
           <td>{{ history.point > 0 ? history.point + " Point" : "-" }}</td>
           <td>{{ history.point < 0 ? history.point + " Point" : "-" }}</td>
           <td>{{ history.recordDate }}</td>
@@ -154,5 +151,24 @@ td {
 }
 .no-data {
   text-align: center;
+}
+.label {
+  border: #7b7a7a;
+  padding: 5px 8px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+.daily {
+  background-color: #c7ed98;
+}
+.betting {
+  background-color: #ed98e6;
+}
+.product {
+  background-color: #98d2ed;
+}
+.desc {
+  text-align: left;
+  padding-left: 10px;
 }
 </style>
