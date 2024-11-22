@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="full">
     <div class="modal" v-show="joinModal">
       <BettingJoin :user-point="userStore.loginUser.currentPoint" @modalOff="joinModal = false" />
     </div>
@@ -234,6 +234,8 @@ const joinBetting = () => {
   border-radius: 5px;
   padding: 20px 20px 10px;
   text-align: center;
+  height: calc(100vh - 150px);
+  position: relative;
 }
 .detail-container h2 {
   font-size: 20px;
@@ -272,8 +274,8 @@ const joinBetting = () => {
   margin: 0 5px;
   border-radius: 5px;
   border: 2px solid #dfdfdf;
-  height: 25px;
-  padding: 3px;
+  height: 30px;
+  padding: 3px 5px;
   outline-color: #82d4d9;
 }
 button {
@@ -287,7 +289,7 @@ input::placeholder {
   margin-top: 10px;
   border-radius: 10px;
   padding: 10px 20px;
-  height: 270px;
+  height: calc((100vh - 150px) / 1.6);
   overflow-y: auto;
 }
 .review-content li {
@@ -309,9 +311,11 @@ svg {
   font-size: 14px;
 }
 .btn-group {
+  position: absolute;
   display: flex;
   justify-content: end;
   gap: 10px;
-  margin-top: 15px;
+  bottom: 1rem;
+  right: 1rem;
 }
 </style>

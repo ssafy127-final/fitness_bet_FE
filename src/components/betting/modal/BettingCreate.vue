@@ -33,7 +33,6 @@ const data = ref({
 });
 const first = ref(true);
 const run = ref(false);
-const REST_API_URL = `http://localhost:1219/betting`;
 const userStore = useUserStore();
 const bettingStore = useBettingStore();
 const createBetting = ref({
@@ -41,18 +40,33 @@ const createBetting = ref({
   missionCnt: "",
   challenger: "",
 });
+const generateRandomArray = (getRandomItemFn, count, additionalItems = []) => [
+  ...Array.from({ length: count }, getRandomItemFn),
+  ...additionalItems,
+];
+const missionData = ref([]);
+const nameData = ref([]);
+const getNum = () => {
+  return Math.floor(Math.random() * 100 + 1);
+};
+const getMissionNum = () => {
+  return missionData.value[Math.floor(Math.random() * missionData.value.length)];
+};
+const getNameNum = () => {
+  return nameData.value[Math.floor(Math.random() * nameData.value.length)];
+};
+
 const getData = () => {
-  axios.get(`${REST_API_URL}/slot`).then((res) => {
+  axios.get(`${bettingStore.REST_API_URL}/slot`).then((res) => {
     console.log(res.data);
-    data.value.nameList = res.data.users.map((item) => item.name);
-    data.value.missionList = res.data.missions.map((item) => item.content);
-    data.value.numList = ["", 4, 6, 7, 24, 63, 42, 12, 21, 51, 28, 42, 11, 29, 34];
+    nameData.value = res.data.users.map((item) => item.name);
+    missionData.value = res.data.missions.map((item) => item.content);
   });
-  axios.get(`${REST_API_URL}/create`, { params: { id: userStore.loginUser.id } }).then((res) => {
+  axios.get(`${bettingStore.REST_API_URL}/create`, { params: { id: userStore.loginUser.id } }).then((res) => {
     console.log(res);
-    data.value.nameList = [...data.value.nameList, res.data.challengeUser.name];
-    data.value.missionList = [...data.value.missionList, ...data.value.missionList, res.data.mission.content];
-    data.value.numList = [...data.value.numList, res.data.missionCnt];
+    data.value.nameList = generateRandomArray(getNameNum, 20, [res.data.challengeUser.name]);
+    data.value.missionList = generateRandomArray(getMissionNum, 10, [res.data.mission.content]);
+    data.value.numList = generateRandomArray(getNum, 14, [res.data.missionCnt]);
 
     createBetting.value.missionId = res.data.mission.id;
     createBetting.value.missionCnt = res.data.missionCnt;
@@ -76,6 +90,12 @@ const regist = () => {
   if (confirm("배팅을 생성하시겠습니까?")) {
     emit("modal");
     bettingStore.registBet(createBetting.value, userStore.loginUser.id);
+    first.value = true;
+    data.value = {
+      nameList: [],
+      missionList: [],
+      numList: [],
+    };
   }
 };
 

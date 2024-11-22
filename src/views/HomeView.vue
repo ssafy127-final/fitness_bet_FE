@@ -50,11 +50,19 @@
         </svg>
       </div>
       <ul class="betting-list">
-        <li v-for="betting in bettingStore.bettingList" :key="betting.id" class="bet-item">
+        <li
+          v-for="betting in bettingStore.bettingList"
+          :key="betting.id"
+          class="bet-item"
+          @click="router.push({ path: `/betting/${betting.id}` })"
+        >
           <p>
             {{ betting.challengeUser.name }}님이 {{ betting.mission.content }}를(을) {{ betting.missionCnt }}개(초 안에)
           </p>
-          <p @click="router.push({ path: `/betting/${betting.id}` })">보러가기 -></p>
+          <div class="gotosee">
+            <p>{{ betting.successCnt ? betting.successCnt : 0 + betting.failCnt ? betting.failCnt : 0 }} 명 참여중</p>
+            <p>상세보기 -></p>
+          </div>
         </li>
       </ul>
     </div>
@@ -163,16 +171,27 @@ const dailyCheck = () => {
 .bet-item {
   display: flex;
   justify-content: space-between;
-  padding: 8px;
+  align-items: center;
+  padding: 6px 8px;
   border-bottom: 1px solid #d8d8d8;
+  cursor: pointer;
+}
+
+.gotosee {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 6px;
 }
 .bet-item :last-child {
-  cursor: pointer;
   font-size: 14px;
+  color: #6a6a6a;
 }
-.bet-item :last-child:hover {
-  font-size: 15px;
+.bet-item:hover {
   font-weight: bold;
+}
+.bet-item:hover p:last-child {
+  font-size: 15px;
 }
 .title {
   border-bottom: 2px solid #bcbbbb;
