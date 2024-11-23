@@ -25,6 +25,10 @@
           <div class="menu-category">
             <RouterLink :to="{ name: 'myPage' }">마이페이지</RouterLink>
             <ul class="dropdown-category">
+              <!-- <li v-if="userStore.loginUser.id === 'admin'"> -->
+              <li>
+                <RouterLink :to="{ name: 'exchange' }">교환 신청 내역</RouterLink>
+              </li>
               <li><RouterLink :to="{ name: 'myPoint' }">포인트 내역</RouterLink></li>
               <li><RouterLink :to="{ name: 'bettingJoinHistory' }">참여 기록 보기</RouterLink></li>
               <li><RouterLink :to="{ name: 'bettingChallengeHistory' }">챌린지 기록 보기</RouterLink></li>
