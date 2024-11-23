@@ -148,9 +148,8 @@ router.beforeEach((to, from) => {
   }
   // 어드민이 아닌데
   if (isAdmin === "0") {
-    if (to.name === "awaitList") {
+    if (to.name === "awaitList" || to.name === "exchange") {
       // 가입 대기 리스트로 가면 안돼
-      console.log("응 못가");
       alert("관리자 권한이 필요합니다.");
       return { name: "home" };
     }
