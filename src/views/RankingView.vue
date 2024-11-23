@@ -7,7 +7,7 @@
         </div>
         <div class="headerR">
           <div class="checkbox-group">
-            <input type="checkbox" id="winRate" v-model="isWinRateSelected"/>
+            <input type="checkbox" id="winRate" v-model="isWinRateSelected" />
             <label for="winRate">승률</label>
           </div>
           <div class="checkbox-group">
@@ -62,7 +62,7 @@ import { ref, onMounted, watch } from "vue";
 const REST_API_URL = `http://localhost:1219/user`;
 
 const rankingList = ref([]);
-const isWinRateSelected = ref(false);
+const isWinRateSelected = ref(true);
 const isCurrentPointSelected = ref(false);
 const isTotalPointSelected = ref(false);
 const loginUserId = sessionStorage.getItem("userId");
@@ -71,11 +71,11 @@ const getRankingList = function (userId) {
   axios
     .get(`${REST_API_URL}/ranking`, { params: { userId } })
     .then((response) => {
-        rankingList.value = response.data.map(user => ({
+      rankingList.value = response.data.map((user) => ({
         ...user,
-        winRate: calculateWinRate(user)
-    }));
-    console.log(response.data);
+        winRate: calculateWinRate(user),
+      }));
+      console.log(response.data);
     })
     .catch((error) => {
       console.error("에러 ::", error);
@@ -91,41 +91,40 @@ const calculateWinRate = (user) => {
 };
 
 const sortByWinRate = () => {
-    rankingList.value.sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
+  rankingList.value.sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
 };
 
 watch(isWinRateSelected, (newValue) => {
-    if (newValue) {
-        sortByWinRate();
-        isCurrentPointSelected.value = false;
-        isTotalPointSelected.value= false;
-    }
+  if (newValue) {
+    sortByWinRate();
+    isCurrentPointSelected.value = false;
+    isTotalPointSelected.value = false;
+  }
 });
 
 const sortByCurrentPoint = () => {
-    rankingList.value.sort((a,b) => b.currentPoint - a.currentPoint);
-}
+  rankingList.value.sort((a, b) => b.currentPoint - a.currentPoint);
+};
 
 watch(isCurrentPointSelected, (newValue) => {
-    if (newValue) {
-        sortByCurrentPoint();
-        isWinRateSelected.value=false;
-        isTotalPointSelected.value=false;
-    }
+  if (newValue) {
+    sortByCurrentPoint();
+    isWinRateSelected.value = false;
+    isTotalPointSelected.value = false;
+  }
 });
 
 const sortByTotalPoint = () => {
-    rankingList.value.sort((a,b) => b.totalPoint - a.totalPoint);
-}
+  rankingList.value.sort((a, b) => b.totalPoint - a.totalPoint);
+};
 
 watch(isTotalPointSelected, (newValue) => {
-    if (newValue) {
-        sortByTotalPoint();
-        isWinRateSelected.value = false;
-        isCurrentPointSelected.value = false;
-    }
+  if (newValue) {
+    sortByTotalPoint();
+    isWinRateSelected.value = false;
+    isCurrentPointSelected.value = false;
+  }
 });
-
 </script>
 
 <style scoped>
