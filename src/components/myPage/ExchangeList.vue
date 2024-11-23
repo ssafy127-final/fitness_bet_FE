@@ -2,24 +2,31 @@
   <div class="containerBox">
     <header>
       <h3>상품 교환 신청 내역</h3>
+      <div class="date-filter">
+        <input type="date" v-model="date.from" /> ~
+        <input type="date" v-model="date.to" />
+        <button @click="search">검색</button>
+      </div>
     </header>
     <div class="table-container">
       <table width="100%">
         <thead>
           <tr>
-            <th width="20%">신청일</th>
-            <th width="25%">신청자 정보</th>
+            <th width="10%">신청일</th>
+            <th width="20%">신청자 정보</th>
             <th width="15%">신청자명</th>
             <th width="25%">품목</th>
+            <th width="15%">핸드폰 번호</th>
             <th width="15%">사용 포인트</th>
           </tr>
         </thead>
         <tbody v-if="exchangeList.length != 0">
           <tr v-for="history in exchangeList" :key="history.id">
             <td>{{ history.recordDate }}</td>
-            <td>{{ history.userCampus }} {{ history.userClass }}반</td>
-            <td>{{ history.userName }}</td>
+            <td>{{ history.userInfo.campus }} {{ history.userInfo.classNum }}반</td>
+            <td>{{ history.userInfo.name }}</td>
             <td>{{ history.productName }}</td>
+            <td>{{ history.userInfo.phone }}</td>
             <td>{{ -history.point }} Point</td>
           </tr>
         </tbody>
@@ -36,6 +43,11 @@
 <script setup>
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";
+const date = ref({
+  from: null,
+  to: null,
+});
+
 const exchangeList = ref([]);
 const REST_API_URL = `http://localhost:1219/product`;
 const getExchangeList = () => {
@@ -47,11 +59,32 @@ const getExchangeList = () => {
     .catch((err) => console.log(err));
 };
 
+const search = () => {
+  axios
+    .get(`${REST_API_URL}/exchange/history`, { params: { from: date.value.from, to: date.value.to } })
+    .then((res) => {
+      exchangeList.value = res.data;
+    })
+    .catch((err) => console.log(err));
+};
+
 onMounted(() => {
   getExchangeList();
 });
 
 watch(() => getExchangeList.value);
+watch(
+  () => date.value,
+  (newVal) => {
+    if (newVal.from && newVal.to && newVal.from > newVal.to) {
+      alert("시작일은 종료일 이후 날짜로 설정할 수 없습니다.");
+
+      date.value.from = null;
+      date.value.to = null;
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>
@@ -76,16 +109,14 @@ header {
   justify-content: space-between;
   align-items: end;
 }
-.headerR {
+.date-filter {
   display: flex;
   flex-direction: row;
   font-size: 14px;
+  gap: 0.8rem;
 }
-.headerR input {
-  margin: 0 3px 0 20px;
-  cursor: pointer;
-}
-.headerR label {
+
+.date-filter input {
   cursor: pointer;
 }
 table {

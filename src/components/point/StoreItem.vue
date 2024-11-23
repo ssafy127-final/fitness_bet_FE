@@ -20,10 +20,10 @@ const props = defineProps({
 });
 
 const change = () => {
-  if (confirm("교환하시겠습니까?")) {
-    if (userStore.loginUser.currentPoint < props.item.point) {
-      alert("보유포인트가 부족합니다.");
-    } else {
+  if (userStore.loginUser.currentPoint < props.item.point) {
+    alert("보유포인트가 부족합니다.");
+  } else {
+    if (confirm("교환 후 취소할 수 없습니다. 교환하시겠습니까?")) {
       axios
         .post(`${props.REST_API_URL}/change`, {
           userId: userStore.loginUser.id,
