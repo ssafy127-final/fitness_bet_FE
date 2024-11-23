@@ -157,6 +157,7 @@ const createReview = () => {
             store.getReviewList(route.params.id, userId);
           }
         })
+        .then(() => (modifyMode.value ? alert("수정되었습니다.") : alert("등록되었습니다.")))
         .catch((err) => console.log(err));
     }
   }
@@ -166,7 +167,6 @@ const createReview = () => {
 const updateReview = (reviewId, content) => {
   review.value = content;
   modifyMode.value = reviewId;
-  console.log("update");
 };
 const deleteReview = (reviewId) => {
   if (confirm("코멘트를 삭제하시겠습니까?")) {
@@ -182,6 +182,7 @@ const deleteReview = (reviewId) => {
           modifyMode.value = "";
         }
       })
+      .then(() => alert("삭제되었습니다."))
       .catch((err) => console.log(err));
   }
 };
