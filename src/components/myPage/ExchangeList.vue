@@ -6,6 +6,7 @@
         <input type="date" v-model="date.from" /> ~
         <input type="date" v-model="date.to" />
         <button @click="search">검색</button>
+        <button @click="getExcel">엑셀다운</button>
       </div>
     </header>
     <div class="table-container">
@@ -41,8 +42,10 @@
 </template>
 
 <script setup>
+import { useUserStore } from "@/stores/user";
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";
+const userStore = useUserStore();
 const date = ref({
   from: null,
   to: null,
@@ -61,11 +64,47 @@ const getExchangeList = () => {
 
 const search = () => {
   axios
-    .get(`${REST_API_URL}/exchange/history`, { params: { from: date.value.from, to: date.value.to } })
+    .get(`${REST_API_URL}/exchange/history`, {
+      params: {
+        from: date.value.from,
+        to: date.value.to,
+      },
+    })
     .then((res) => {
       exchangeList.value = res.data;
     })
     .catch((err) => console.log(err));
+};
+
+const getExcel = () => {
+  axios
+    .get(`${REST_API_URL}/download`, {
+      responseType: "blob",
+      withCredentials: true,
+      params: {
+        from: date.value.from,
+        to: date.value.to,
+      },
+    })
+    .then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+
+      // 파일 이름 처리
+      const contentDisposition = response.headers["content-disposition"];
+      const fileName = contentDisposition
+        ? contentDisposition.split("filename=")[1].replace(/"/g, "")
+        : "exchang_list.xlsx";
+
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    })
+    .catch((error) => {
+      console.error("다운로드 실패: ", error);
+    });
 };
 
 onMounted(() => {
