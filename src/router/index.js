@@ -7,6 +7,7 @@ import BettingList from "@/components/betting/BettingList.vue";
 import LoginRegistForm from "@/components/login/LoginRegistForm.vue";
 import MissionList from "@/components/mission/MissionList.vue";
 import AwaitList from "@/components/myPage/AwaitList.vue";
+import ExchangeList from "@/components/myPage/ExchangeList.vue";
 import MyInfo from "@/components/myPage/MyInfo.vue";
 import MyPoint from "@/components/myPage/MyPoint.vue";
 import { useUserStore } from "@/stores/user";
@@ -38,11 +39,11 @@ const router = createRouter({
       component: MissionView,
       children: [
         {
-          path : "",
-          name : "missionList",
-          component : MissionList
-        }
-      ]
+          path: "",
+          name: "missionList",
+          component: MissionList,
+        },
+      ],
     },
     {
       path: "/betting",
@@ -102,15 +103,20 @@ const router = createRouter({
           component: MyPoint,
         },
         {
+          path: "exchange",
+          name: "exchange",
+          component: ExchangeList,
+        },
+        {
           path: "info",
           name: "myInfo",
           component: MyInfo,
         },
         {
-          path : "awaitList",
-          name : "awaitList",
-          component: AwaitList
-        }
+          path: "awaitList",
+          name: "awaitList",
+          component: AwaitList,
+        },
       ],
     },
     {
@@ -127,7 +133,7 @@ router.beforeEach((to, from) => {
   console.log(to);
   console.log(from);
   if (!sessionStorage.getItem("userId")) {
-    console.log("로그안안해써")
+    console.log("로그안안해써");
     // 로그인을 안했는데
     if (to.name !== "login" && to.name !== "regist") {
       // 가고자 하는 곳이, 로그인 과 회원가입이 아니면
@@ -141,14 +147,14 @@ router.beforeEach((to, from) => {
     }
   }
   // 어드민이 아닌데
-  if(isAdmin === "0"){
-    if(to.name === "awaitList"){ // 가입 대기 리스트로 가면 안돼
-      console.log("응 못가")
-      alert("관리자 권한이 필요합니다.")
-      return {name : "home"}
+  if (isAdmin === "0") {
+    if (to.name === "awaitList") {
+      // 가입 대기 리스트로 가면 안돼
+      console.log("응 못가");
+      alert("관리자 권한이 필요합니다.");
+      return { name: "home" };
     }
-  } 
-}
-);
+  }
+});
 
 export default router;

@@ -1,7 +1,7 @@
 <template>
   <div class="containerBox">
     <header>
-      <h3>포인트 내역 기록</h3>
+      <h3>포인트 적립/사용 내역</h3>
 
       <div class="headerR">
         <input type="checkbox" id="total" :checked="selected === 'total'" @click="() => select('total')" />
@@ -34,7 +34,7 @@
             <td v-if="history.category == 2"><span class="label betting">배팅</span></td>
             <td v-if="history.category == 2" class="desc">배팅 참여 포인트 사용</td>
             <td>{{ history.point > 0 ? history.point + " Point" : "-" }}</td>
-            <td>{{ history.point < 0 ? history.point + " Point" : "-" }}</td>
+            <td>{{ history.point < 0 ? -history.point + " Point" : "-" }}</td>
             <td>{{ history.recordDate }}</td>
           </tr>
         </tbody>
