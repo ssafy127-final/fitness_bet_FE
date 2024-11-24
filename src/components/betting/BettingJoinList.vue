@@ -91,6 +91,18 @@ const select = (id) => {
 };
 
 watch(() => select.value);
+watch(
+  () => userStore.loginUser,
+  (newUser) => store.getJoinList(newUser.id)
+);
+
+watch(
+  () => store.bettingJoinList, // 원본 데이터 감시
+  (newList) => {
+    select(selected.value); // 필터 갱신
+  },
+  { immediate: true } // 초기 실행
+);
 </script>
 
 <style scoped>

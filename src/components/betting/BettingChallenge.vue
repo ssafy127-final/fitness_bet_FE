@@ -26,7 +26,7 @@
           <tr v-for="(betting, idx) in filterBettingChallengeList" :key="betting.id">
             <td>{{ betting.regDate }}</td>
             <td style="text-align: left">
-              {{ betting.challengeUser.name }}님이 {{ betting.mission.content }}을(를) {{ betting.mission_cnt }}회(초
+              {{ betting.challengeUser.name }}님이 {{ betting.mission.content }}을(를) {{ betting.missionCnt }}회(초
               안에) 도전
             </td>
             <td class="per">
@@ -62,7 +62,7 @@
 <script setup>
 import { useBettingStore } from "@/stores/betting";
 import { useUserStore } from "@/stores/user";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const selected = ref("total");
 const store = useBettingStore();
@@ -90,6 +90,19 @@ const select = (id) => {
     filterBettingChallengeList.value = store.bettingChallengeList.filter((item) => item.result != -1); // 실패배팅
   }
 };
+
+watch(
+  () => userStore.loginUser,
+  (newUser) => store.getChallengeList(newUser.id)
+);
+
+watch(
+  () => store.bettingChallengeList, // 원본 데이터 감시
+  (newList) => {
+    select(selected.value); // 필터 갱신
+  },
+  { immediate: true } // 초기 실행
+);
 </script>
 
 <style scoped>

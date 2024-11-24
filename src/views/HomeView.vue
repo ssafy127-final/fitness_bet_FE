@@ -3,8 +3,9 @@
     <div class="welcome">
       <h4>
         <span class="point">{{ userStore.loginUser.name }}</span
-        >님, <br />환영합니다.
+        >님,
       </h4>
+      <h4 style="margin-top: 0.4rem">환영합니다.</h4>
       <div
         v-if="userStore.loginUser.visited < moment().format('YYYY-MM-DD') || !userStore.loginUser.visited"
         class="notIn"
@@ -19,9 +20,16 @@
       </div>
     </div>
     <div class="info">
-      <h3>내 포인트 : {{ userStore.loginUser.currentPoint }} POINT</h3>
-      <p>내 승률 : {{ loginUserWinRateInfo.winRate }}</p>
-      <p> 전적 : {{ loginUserWinRateInfo.totalGames }} 전 {{ loginUserWinRateInfo.winGames }} 승 {{ loginUserWinRateInfo.totalGames - loginUserWinRateInfo.winGames }} 패</p>
+      <div class="info-data">
+        <h3>내 포인트 : {{ userStore.loginUser.currentPoint }} POINT</h3>
+        <p>내 승률 : {{ loginUserWinRateInfo.winRate }}</p>
+        <p>
+          전적 : {{ loginUserWinRateInfo.totalGames }} 전 {{ loginUserWinRateInfo.winGames }} 승
+          {{ loginUserWinRateInfo.totalGames - loginUserWinRateInfo.winGames }} 패
+        </p>
+      </div>
+      <div v-if="myRank" class="myRank">현재 내 순위 : {{ myRank }} 위</div>
+      <div v-else class="myRank">배팅에 참여하고 상위 랭커가 되어보세요!</div>
     </div>
     <div class="betting">
       <div class="title">
@@ -69,7 +77,7 @@
       </ul>
     </div>
     <div class="ranking-box">
-      <div class = "ranking-header">
+      <div class="ranking-header">
         <h3>우리반 Top 5</h3>
       </div>
       <table width="100%">
@@ -81,8 +89,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user,index) in top5Users" :key ="user.id">
-            <td>{{ index + 1 }} </td>
+          <tr v-for="(user, index) in top5Users" :key="user.id">
+            <td>{{ index + 1 }}</td>
             <td>{{ user.name }}</td>
             <td>{{ user.winRate }}</td>
           </tr>
@@ -103,23 +111,23 @@ import { onMounted, watch, ref } from "vue";
 const userStore = useUserStore();
 const bettingStore = useBettingStore();
 onMounted(async () => {
-  try{
-  bettingStore.getList(userStore.loginUser.id);
-  userStore.restoreLogin();
-  console.log("랭킹리스트불러온다")
-  await userStore.getRankingList(userStore.loginUser.id);
-  console.log(userStore.sortedRankingList);
-  await getWinRate(userStore.loginUser.id);
-  getTop5ByWinRate();
-}
-catch(error){
+  try {
+    bettingStore.getList(userStore.loginUser.id);
+    userStore.restoreLogin();
+    console.log("랭킹리스트불러온다");
+    await userStore.getRankingList(userStore.loginUser.id);
+    console.log(userStore.sortedRankingList);
+    await getWinRate(userStore.loginUser.id);
+    getTop5ByWinRate();
+  } catch (error) {
     console.error("에러 발생:", error);
-}});
+  }
+});
 
 const loginUserWinRateInfo = ref({
-  totalGames: '',
-  winGames: '',
-  winRate: ''
+  totalGames: "",
+  winGames: "",
+  winRate: "",
 });
 
 const getWinRate = async function (loginUserId) {
@@ -130,13 +138,13 @@ const getWinRate = async function (loginUserId) {
     }
 
     // 로그인한 유저 정보를 검색
-    const userInfo = userStore.sortedRankingList.find(user => user.id === loginUserId);
+    const userInfo = userStore.sortedRankingList.find((user) => user.id === loginUserId);
     if (userInfo) {
       // loginUserWinRateInfo에 유저 정보 저장
       loginUserWinRateInfo.value = {
         totalGames: userInfo.totalGames,
         winGames: userInfo.winGames,
-        winRate: userInfo.winRate
+        winRate: userInfo.winRate,
       };
       console.log("로그인한 유저의 승률 정보:", loginUserWinRateInfo.value);
     } else {
@@ -149,6 +157,7 @@ const getWinRate = async function (loginUserId) {
 
 // TOP 5명을 저장 객체
 const top5Users = ref([]);
+const myRank = ref(null);
 
 const getTop5ByWinRate = function () {
   if (!userStore.sortedRankingList || userStore.sortedRankingList.length === 0) {
@@ -158,13 +167,16 @@ const getTop5ByWinRate = function () {
   }
 
   // totalGames가 0이 아닌 유저만 필터링
-  const filteredList = userStore.sortedRankingList.filter(user => user.totalGames > 0);
+  const filteredList = userStore.sortedRankingList.filter((user) => user.totalGames > 0);
 
   if (filteredList.length === 0) {
     console.log("조건에 맞는 유저가 없습니다.");
     top5Users.value = []; // 빈 배열로 초기화
     return;
   }
+  console.log(filteredList);
+  const rank = filteredList.findIndex((item) => item.id === userStore.loginUser.id);
+  myRank.value = rank ? rank + 1 : null;
 
   // 상위 5명 추출
   top5Users.value = filteredList.slice(0, 5);
@@ -185,9 +197,6 @@ const dailyCheck = () => {
       console.error("에러!!! ", error);
     });
 };
-
-
-
 </script>
 
 <style scoped>
@@ -218,13 +227,14 @@ const dailyCheck = () => {
   position: absolute;
   width: 80px;
   height: 70px;
-  right: 20px;
-  bottom: 20px;
+  right: 1.7rem;
+  bottom: 1.7rem;
   color: white;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-size: 1.1rem;
 }
 .notIn {
   cursor: pointer;
@@ -236,10 +246,26 @@ const dailyCheck = () => {
 .info {
   grid-column: 2/4;
   background-color: #f6ceb6;
-  padding: 30px;
+  padding: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.info-data {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1rem;
+  font-size: 1.3rem;
+}
+.info-data h3 {
+  font-size: 1.5rem;
+}
+.myRank {
+  background-color: #f9e1ce;
+  font-size: 1.3rem;
+  padding: 1.5rem;
+  color: #535353;
+  font-weight: bold;
 }
 .betting {
   grid-column: 1/3;
@@ -299,7 +325,14 @@ const dailyCheck = () => {
   border-radius: 10px;
   cursor: pointer;
   text-align: center;
-  padding: 20px 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ranking-header {
+  margin-bottom: 1.5rem;
 }
 
 th {
@@ -311,6 +344,9 @@ th {
 table {
   border-collapse: collapse;
   text-align: center;
+  flex-grow: 1; /* table을 컨테이너 높이에 맞춤 */
+  width: 100%;
+  height: 100%; /* 테이블을 박스 크기에 맞춤 */
 }
 
 tr,
@@ -318,5 +354,19 @@ td,
 th {
   border-bottom: 1.5px solid #7b7a7a;
   padding: 0.5rem 0;
+}
+
+tr:last-child,
+tr:last-child td {
+  border-bottom: none;
+}
+
+th,
+td {
+  padding: 0.5rem 0;
+}
+
+tr {
+  padding: 1rem 0;
 }
 </style>
