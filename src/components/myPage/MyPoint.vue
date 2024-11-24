@@ -62,7 +62,8 @@ const getPointList = (id) => {
       params: { userId: id },
     })
     .then((res) => {
-      allList.value = res.data;
+      console.log(res.data);
+      allList.value = res.data.sort((a, b) => new Date(b.recordDate) - new Date(a.recordDate));
       select("total"); // 데이터를 가져온 후 즉시 필터링
     });
 };

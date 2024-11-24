@@ -3,8 +3,9 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import router from "@/router";
 
-const REST_API_URL = `http://localhost:1219/user`;
 export const useUserStore = defineStore("user", () => {
+  const REST_API_URL = `http://localhost:1219/user`;
+
   // 임시 데이터(로그인하면 axios로 받아오기)
   const loginUser = ref(null);
 
@@ -121,7 +122,7 @@ export const useUserStore = defineStore("user", () => {
   
 
   return { loginUser, login, restoreLogin, logout, userList, getUserList, notAcceptedList, getNotAcceptedList,juniorAdminList ,getJuniorAdminList
-    ,rankingList, getRankingList, sortedRankingList , sortByWinRate
+    ,rankingList, getRankingList, sortedRankingList , sortByWinRate, REST_API_URL
   };
 
 
