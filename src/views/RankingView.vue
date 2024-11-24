@@ -67,22 +67,23 @@ const isCurrentPointSelected = ref(false);
 const isTotalPointSelected = ref(false);
 const loginUserId = sessionStorage.getItem("userId");
 
-const getRankingList = function (userId) {
-  axios
-    .get(`${REST_API_URL}/ranking`, { params: { userId } })
-    .then((response) => {
-      rankingList.value = response.data.map((user) => ({
-        ...user,
-        winRate: calculateWinRate(user),
-      }));
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("에러 ::", error);
-    });
+const getRankingList = async function (userId) {
+  try {
+    const response = await axios.get(`${REST_API_URL}/ranking`, { params: { userId } });
+    rankingList.value = response.data.map((user) => ({
+      ...user,
+      winRate: calculateWinRate(user),
+    }));
+    console.log(response.data);
+  } catch (error) {
+    console.error("에러 ::", error);
+  }
 };
-onMounted(() => {
-  getRankingList(loginUserId); // 전체 리스트
+onMounted(async () => { 
+  await getRankingList(loginUserId); // 데이터 로드 대기
+  if (isWinRateSelected.value) {
+    await sortByWinRate(); // 승률 정렬
+  }
 });
 
 const calculateWinRate = (user) => {
@@ -90,8 +91,21 @@ const calculateWinRate = (user) => {
   return ((user.winGames / user.totalGames) * 100).toFixed(2) + "%";
 };
 
-const sortByWinRate = () => {
-  rankingList.value.sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
+const sortByWinRate = async () => {
+  if (!rankingList.value || rankingList.value.length === 0) {
+    console.log("랭킹 리스트를 불러오는 중...");
+    await getRankingList(loginUserId); // 비동기 호출로 리스트 가져오기
+  }
+
+  // 승률 기준으로 정렬
+  rankingList.value.sort((a, b) => {
+    const winRateDiff = parseFloat(b.winRate) - parseFloat(a.winRate);
+    if (winRateDiff !== 0) {
+      return winRateDiff; // 승률이 다르면 승률로 정렬
+    }
+    return b.totalGames - a.totalGames; // 승률이 같으면 totalGames로 정렬
+  });
+  console.log("랭킹 리스트 정렬 완료:", rankingList.value);
 };
 
 watch(isWinRateSelected, (newValue) => {
