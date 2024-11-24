@@ -8,17 +8,26 @@
       <div class="input-box">
         <div class="login-form-id">
           <label for="userId" class="input-label">아이디 </label>
-          <input type="text" v-model="loginId" name="userId" class="login-input" placeholder="ID를 입력하세요" @keyup.enter="login" required/>
+          <input
+            type="text"
+            v-model="loginId"
+            name="userId"
+            class="login-input"
+            placeholder="ID를 입력하세요"
+            @keyup.enter="login"
+            required
+          />
         </div>
 
         <div class="login-form-password">
-          <label for="password" class="input-label" >비밀번호 </label>
+          <label for="password" class="input-label">비밀번호 </label>
           <input
             type="password"
             v-model="loginPassword"
             name="password"
             class="login-input"
-            placeholder="비밀번호를 입력하세요" @keyup.enter="login"
+            placeholder="비밀번호를 입력하세요"
+            @keyup.enter="login"
             required
           />
         </div>
@@ -59,7 +68,7 @@ const login = function () {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10rem;
+  gap: 5rem;
 }
 
 #logo {
