@@ -20,8 +20,8 @@
     </div>
     <div class="info">
       <h3>내 포인트 : {{ userStore.loginUser.currentPoint }} POINT</h3>
-      <p>당신은 현재 '00승 00패' 입니다.</p>
-      <p>내 승률 : 00 %</p>
+      <p>내 승률 : {{ loginUserWinRateInfo.winRate }}</p>
+      <p> 전적 : {{ loginUserWinRateInfo.totalGames }} 전 {{ loginUserWinRateInfo.winGames }} 승 {{ loginUserWinRateInfo.totalGames - loginUserWinRateInfo.winGames }} 패</p>
     </div>
     <div class="betting">
       <div class="title">
@@ -68,8 +68,26 @@
         </li>
       </ul>
     </div>
-    <div class="ranking">
-      <h3>우리반 Top 5</h3>
+    <div class="ranking-box">
+      <div class = "ranking-header">
+        <h3>우리반 Top 5</h3>
+      </div>
+      <table width="100%">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>이름</th>
+            <th>승률</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(user,index) in top5Users" :key ="user.id">
+            <td>{{ index + 1 }} </td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.winRate }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -80,22 +98,84 @@ import { useBettingStore } from "@/stores/betting";
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
 import moment from "moment";
-import { onMounted, watch } from "vue";
+import { onMounted, watch, ref } from "vue";
 
 const userStore = useUserStore();
 const bettingStore = useBettingStore();
-console.log();
-onMounted(() => {
+onMounted(async () => {
+  try{
   bettingStore.getList(userStore.loginUser.id);
   userStore.restoreLogin();
+  console.log("랭킹리스트불러온다")
+  await userStore.getRankingList(userStore.loginUser.id);
+  console.log(userStore.sortedRankingList);
+  await getWinRate(userStore.loginUser.id);
+  getTop5ByWinRate();
+}
+catch(error){
+    console.error("에러 발생:", error);
+}});
+
+const loginUserWinRateInfo = ref({
+  totalGames: '',
+  winGames: '',
+  winRate: ''
 });
-console.log(bettingStore.bettingList);
+
+const getWinRate = async function (loginUserId) {
+  try {
+    if (!userStore.sortedRankingList || userStore.sortedRankingList.length === 0) {
+      console.log("랭킹 리스트를 가져오는 중...");
+      await userStore.getRankingList(userStore.loginUser.id); // 비동기 함수 대기
+    }
+
+    // 로그인한 유저 정보를 검색
+    const userInfo = userStore.sortedRankingList.find(user => user.id === loginUserId);
+    if (userInfo) {
+      // loginUserWinRateInfo에 유저 정보 저장
+      loginUserWinRateInfo.value = {
+        totalGames: userInfo.totalGames,
+        winGames: userInfo.winGames,
+        winRate: userInfo.winRate
+      };
+      console.log("로그인한 유저의 승률 정보:", loginUserWinRateInfo.value);
+    } else {
+      console.log("로그인한 유저 정보를 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("승률 정보를 가져오는 중 에러 발생:", error);
+  }
+};
+
+// TOP 5명을 저장 객체
+const top5Users = ref([]);
+
+const getTop5ByWinRate = function () {
+  if (!userStore.sortedRankingList || userStore.sortedRankingList.length === 0) {
+    console.log("랭킹 리스트가 비어 있습니다.");
+    top5Users.value = []; // 빈 배열로 초기화
+    return;
+  }
+
+  // totalGames가 0이 아닌 유저만 필터링
+  const filteredList = userStore.sortedRankingList.filter(user => user.totalGames > 0);
+
+  if (filteredList.length === 0) {
+    console.log("조건에 맞는 유저가 없습니다.");
+    top5Users.value = []; // 빈 배열로 초기화
+    return;
+  }
+
+  // 상위 5명 추출
+  top5Users.value = filteredList.slice(0, 5);
+  console.log("TOP5 승률 랭킹 리스트 : ", top5Users.value);
+};
+
 watch(() => userStore.loginUser);
 const REST_API_URL = "http://localhost:1219/user";
 
 const dailyCheck = () => {
   userStore.restoreLogin();
-  console.log(typeof userStore.loginUser.id);
   axios
     .post(`${REST_API_URL}/daily`, null, { params: { id: userStore.loginUser.id } })
     .then(() => {
@@ -105,6 +185,9 @@ const dailyCheck = () => {
       console.error("에러!!! ", error);
     });
 };
+
+
+
 </script>
 
 <style scoped>
@@ -210,12 +293,30 @@ const dailyCheck = () => {
   cursor: pointer;
 }
 
-.ranking {
+.ranking-box {
   border: 3px solid #82d4d9;
   background-color: white;
   border-radius: 10px;
   cursor: pointer;
   text-align: center;
   padding: 20px 10px;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+table {
+  border-collapse: collapse;
+  text-align: center;
+}
+
+tr,
+td,
+th {
+  border-bottom: 1.5px solid #7b7a7a;
+  padding: 0.5rem 0;
 }
 </style>

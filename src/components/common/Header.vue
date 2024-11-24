@@ -25,7 +25,7 @@
           <div class="menu-category">
             <RouterLink :to="{ name: 'myPage' }">마이페이지</RouterLink>
             <ul class="dropdown-category">
-              <li v-if="userStore.loginUser.admin === 1">
+              <li v-if="userStore.loginUser?.admin === 1">
                 <RouterLink :to="{ name: 'exchange' }">교환 신청 내역</RouterLink>
               </li>
               <li><RouterLink :to="{ name: 'myPoint' }">포인트 내역</RouterLink></li>
