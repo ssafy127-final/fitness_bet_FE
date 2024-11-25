@@ -116,7 +116,7 @@ import { useMissionStore } from "@/stores/mission";
 import { ref } from "vue";
 import { onMounted } from "vue";
 import MissionCreateModal from "./modal/MissionCreateModal.vue";
-import MissionUpdateModal from "./MissionUpdateModal.vue";
+import MissionUpdateModal from "./modal/MissionUpdateModal.vue";
 import axios from "axios";
 
 const REST_API_URL = `http://localhost:1219/mission`;
