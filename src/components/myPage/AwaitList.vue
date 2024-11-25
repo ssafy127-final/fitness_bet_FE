@@ -293,6 +293,7 @@ console.log(loginUserId.value);
 const userStore = useUserStore();
 onMounted(() => {
   reloadList();
+  userStore.getAwaitList();
 });
 
 const reloadList = function () {

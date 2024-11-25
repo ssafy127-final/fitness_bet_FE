@@ -8,13 +8,13 @@
       <div class="second">
         <div class="male">
           <p>남성</p>
-          <input type="number" placeholder="최소 난이도를 입력하세요." v-model="maleMin" required />
-          <input type="number" placeholder="최대 난이도를 입력하세요." v-model="maleMax" required />
+          <input type="number" placeholder="최소값을 입력하세요." v-model="maleMin" required />
+          <input type="number" placeholder="최대값을 입력하세요." v-model="maleMax" required />
         </div>
         <div class="female">
           <p>여성</p>
-          <input type="number" placeholder="최소 난이도를 입력하세요." v-model="femaleMin" required />
-          <input type="number" placeholder="최대 난이도를 입력하세요." v-model="femaleMax" required />
+          <input type="number" placeholder="최소값을 입력하세요." v-model="femaleMin" required />
+          <input type="number" placeholder="최대값을 입력하세요." v-model="femaleMax" required />
         </div>
       </div>
     </div>
@@ -39,6 +39,14 @@ const femaleMin = ref();
 const femaleMax = ref();
 
 const isValidRange = ref(false);
+
+const initMission = function(){
+  missionContent.value ="",
+  maleMin.value="",
+  maleMax.value="",
+  femaleMin.value="",
+  femaleMax.value=""
+}
 
 const checkRange = function () {
   if (
@@ -74,6 +82,7 @@ const regist = function () {
         alert("등록되었습니다.");
         emit("reload");
         emit("modal");
+        initMission();
       })
       .catch((error) => {
         console.error("미션 등록 에러 :", error);

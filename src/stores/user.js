@@ -74,7 +74,7 @@ export const useUserStore = defineStore("user", () => {
       }
     })
   }
-
+   
   const notAcceptedList = ref([]);
 
   const getNotAcceptedList = function(){
@@ -89,6 +89,7 @@ export const useUserStore = defineStore("user", () => {
       console.error("userList.value is not defined or loaded yet.");
       return; // 함수를 여기서 종료
     }
+    console.log(userList.value);
     juniorAdminList.value = userList.value.filter(user => user && user.admin === 1 && user.accept === 0);
     console.log(juniorAdminList.value);
   }
