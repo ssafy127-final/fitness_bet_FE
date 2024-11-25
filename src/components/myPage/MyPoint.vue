@@ -33,6 +33,8 @@
             <td v-if="history.category == 1" class="desc">배팅 성공으로 인한 포인트 획득</td>
             <td v-if="history.category == 2"><span class="label betting">배팅</span></td>
             <td v-if="history.category == 2" class="desc">배팅 참여 포인트 사용</td>
+            <td v-if="history.category == 4"><span class="label betting">배팅</span></td>
+            <td v-if="history.category == 4" class="desc">배팅 챌린저 참여 보상 포인트</td>
             <td>{{ history.point > 0 ? history.point + " Point" : "-" }}</td>
             <td>{{ history.point < 0 ? -history.point + " Point" : "-" }}</td>
             <td>{{ history.recordDate }}</td>
