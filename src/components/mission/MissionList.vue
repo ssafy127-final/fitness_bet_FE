@@ -1,9 +1,9 @@
 <template>
-  <div class="containerBox">
+  <div class="containerBox" @click.self = "closeCreateModal">
     <div class="modal" v-show="createModalOn">
       <MissionCreateModal @modal="createModalState" @reload="reloadData" />
     </div>
-    <div class="modal" v-show="modifyModalOn">
+    <div class="modal" v-show="modifyModalOn" @click.self = "closeModifyModal">
       <MissionUpdateModal @modal="modifyModalState" />
     </div>
     <header :class="{ blur: modalOn }">
@@ -153,6 +153,11 @@ const modifyModalState = () => {
   modalOn.value = false;
   modifyModalOn.value = false;
 };
+
+const closeCreateModal = () =>{
+  createModalOn.value = false;
+  modalOn.value = false;
+}
 
 const remove = (missionId) => {
   axios

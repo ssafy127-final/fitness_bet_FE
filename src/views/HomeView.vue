@@ -79,7 +79,7 @@
         </li>
       </ul>
     </div>
-    <div class="ranking-box">
+    <div class="ranking-box" @click="router.push({ path: '/ranking' })">
       <div class="ranking-header">
         <h3>우리반 Top 5</h3>
       </div>
