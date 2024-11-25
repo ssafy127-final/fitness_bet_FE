@@ -221,7 +221,7 @@ input::placeholder {
   margin-top: 10px;
   border-radius: 10px;
   padding: 10px 20px;
-  height: calc(100vh - 150px - 250px);
+  height: calc(100vh - 150px - 260px);
   overflow-y: auto;
 }
 .review-content li {

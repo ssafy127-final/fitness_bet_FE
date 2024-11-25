@@ -74,6 +74,9 @@
             <p>상세보기 -></p>
           </div>
         </li>
+        <li v-if="bettingStore.bettingList.length == 0" style="text-align: center; margin-top: 1rem">
+          진행중인 배팅이 없습니다.
+        </li>
       </ul>
     </div>
     <div class="ranking-box" @click="router.push({ path: '/ranking' })">
