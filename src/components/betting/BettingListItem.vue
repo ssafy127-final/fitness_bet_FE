@@ -48,9 +48,9 @@ const props = defineProps({
   betting: Object,
   finished: Boolean,
 });
-onBeforeMount(() => {
-  console.log(props.betting.history);
-});
+// onBeforeMount(() => {
+//   console.log(props.betting.history);
+// });
 </script>
 
 <style scoped>

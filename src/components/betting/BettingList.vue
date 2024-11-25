@@ -6,7 +6,7 @@
     <header :class="{ blur: modalOn }">
       <div class="headerL">
         <h3>진행중 배팅</h3>
-        <button class="createBtn" @click="createBtn" v-if="userStore.loginUser.admin == 1">생성하기</button>
+        <button class="createBtn" @click="createBtn" v-if="userStore.loginUser?.admin == 1">생성하기</button>
       </div>
       <div class="headerR">
         <input type="checkbox" id="total" :checked="selected === 'total'" @change="select('total')" />
@@ -63,8 +63,9 @@ const select = (id) => {
     ); // 참여한 리스트 보기
   }
 };
-onMounted(() => {
-  store.getList(userStore.loginUser.id);
+onMounted(async () => {
+  await userStore.restoreLogin();
+  await store.getList(userStore.loginUser.id);
   select("total");
 });
 
@@ -72,6 +73,13 @@ watch(
   () => store.bettingList,
   (newValue) => {
     select(selected.value); // 새 값으로 필터링
+  },
+  { deep: true }
+);
+watch(
+  () => userStore.loginUser,
+  (newValue) => {
+    store.getList(newValue.id);
   },
   { deep: true }
 );
