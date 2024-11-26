@@ -1,10 +1,14 @@
 <template>
   <div class="container">
-    <h4>© 2024. So Kyu T. All rights reserved.</h4>
+    <h4>© 2024. <span @click="bettingStore.changeMode">So Kyu T</span>. All rights reserved.</h4>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useBettingStore } from "@/stores/betting";
+
+const bettingStore = useBettingStore();
+</script>
 
 <style scoped>
 .container {

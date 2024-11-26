@@ -22,7 +22,7 @@
     <div class="info">
       <div class="info-data">
         <h3>내 포인트 : {{ userStore.loginUser.currentPoint }} POINT</h3>
-        <p>내 승률 : {{ loginUserWinRateInfo.winRate ? loginUserWinRateInfo.winRate : "0 %" }}</p>
+        <p>내 승률 : {{ loginUserWinRateInfo.winRate ? loginUserWinRateInfo.winRate : "0%" }}</p>
         <p>
           전적 : {{ loginUserWinRateInfo.totalGames ? loginUserWinRateInfo.totalGames : 0 }} 전
           {{ loginUserWinRateInfo.winGames ? loginUserWinRateInfo.winGames : 0 }} 승

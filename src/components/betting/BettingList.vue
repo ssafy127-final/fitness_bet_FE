@@ -5,10 +5,10 @@
     </div>
     <header :class="{ blur: modalOn }">
       <div class="headerL">
-        <h3>진행중 배팅</h3>
+        <h3 :class="{ dark: store.darkMode }">진행중 배팅</h3>
         <button class="createBtn" @click="createBtn" v-if="userStore.loginUser?.admin == 1">생성하기</button>
       </div>
-      <div class="headerR">
+      <div class="headerR" :class="{ dark: store.darkMode }">
         <input type="checkbox" id="total" :checked="selected === 'total'" @change="select('total')" />
         <label for="total">전체보기</label>
         <input type="checkbox" id="canJoin" :checked="selected === 'canJoin'" @change="select('canJoin')" />
@@ -19,7 +19,11 @@
     </header>
     <div class="content" :class="{ blur: modalOn }">
       <BettingListItem v-for="item in filterBettingList" :key="item.id" :betting="item" />
-      <div v-if="filterBettingList.length == 0" style="text-align: center; margin-top: 2.5rem">
+      <div
+        v-if="filterBettingList.length == 0"
+        style="text-align: center; margin-top: 2.5rem"
+        :class="{ dark: store.darkMode }"
+      >
         현재 진행중인 배팅이 없습니다.
       </div>
     </div>
@@ -135,5 +139,8 @@ h3 {
   gap: 20px;
   max-height: calc(100vh - 220px);
   overflow-y: auto;
+}
+.dark {
+  color: white;
 }
 </style>

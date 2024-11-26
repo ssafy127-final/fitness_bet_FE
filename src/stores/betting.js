@@ -4,6 +4,10 @@ import axios from "axios";
 import router from "@/router";
 
 export const useBettingStore = defineStore("betting", () => {
+  const darkMode = ref(false);
+  const changeMode = () => {
+    darkMode.value = !darkMode.value;
+  };
   const REST_API_URL = `http://localhost:1219/betting`;
   const bettingList = ref([]);
   const betting = ref({
@@ -136,5 +140,7 @@ export const useBettingStore = defineStore("betting", () => {
     getChallengeList,
     registBet,
     getDetailFromBack,
+    darkMode,
+    changeMode,
   };
 });
