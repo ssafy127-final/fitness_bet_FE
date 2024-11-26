@@ -56,14 +56,12 @@ const getNameNum = () => {
   return nameData.value[Math.floor(Math.random() * nameData.value.length)];
 };
 
-const getData = () => {
-  axios.get(`${bettingStore.REST_API_URL}/slot`).then((res) => {
-    console.log(res.data);
+const getData = async () => {
+  await axios.get(`${bettingStore.REST_API_URL}/slot`).then((res) => {
     nameData.value = res.data.users.map((item) => item.name);
     missionData.value = res.data.missions.map((item) => item.content);
   });
-  axios.get(`${bettingStore.REST_API_URL}/create`, { params: { id: userStore.loginUser.id } }).then((res) => {
-    console.log(res);
+  await axios.get(`${bettingStore.REST_API_URL}/create`, { params: { id: userStore.loginUser.id } }).then((res) => {
     data.value.nameList = generateRandomArray(getNameNum, 20, [res.data.challengeUser.name]);
     data.value.missionList = generateRandomArray(getMissionNum, 10, [res.data.mission.content]);
     data.value.numList = generateRandomArray(getNum, 14, [res.data.missionCnt]);
@@ -73,16 +71,16 @@ const getData = () => {
     createBetting.value.challenger = res.data.challengeUser.id;
   });
 };
-const firstRun = () => {
-  getData();
+const firstRun = async () => {
+  await getData();
   first.value = false;
   run.value = true;
 };
 
 const emit = defineEmits(["retry", "modal"]);
 
-const retry = () => {
-  getData();
+const retry = async () => {
+  await getData();
   run.value = true;
 };
 
