@@ -1,11 +1,15 @@
 <template>
   <div>
     <header>
-      <h3>종료된 배팅</h3>
+      <h3 :class="{ dark: store.darkMode }">종료된 배팅</h3>
     </header>
     <div class="content">
       <BettingListItem v-for="item in store.finishedList" :key="item.id" :betting="item" finished="true" />
-      <div v-if="store.finishedList.length == 0" style="text-align: center; margin-top: 2.5rem">
+      <div
+        v-if="store.finishedList.length == 0"
+        style="text-align: center; margin-top: 2.5rem"
+        :class="{ dark: store.darkMode }"
+      >
         종료된 배팅이 없습니다.
       </div>
     </div>
@@ -56,5 +60,8 @@ h3 {
   gap: 20px;
   max-height: calc(100vh - 220px);
   overflow-y: auto;
+}
+.dark {
+  color: white;
 }
 </style>
