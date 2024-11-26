@@ -80,7 +80,7 @@ watch(
 div {
   font-weight: bold;
   border-style: solid;
-  padding: 20px;
+  padding: 20px 0;
   text-align: center;
   display: flex;
   flex-direction: column;
