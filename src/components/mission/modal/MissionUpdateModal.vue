@@ -3,7 +3,7 @@
     <header>미션 수정</header>
     <div class="content">
       <div class="misson">
-        <input type="text" placeholder="주제를 등록하세요 (ex : 푸시업)" v-model="missionContent" required />
+        <input type="text" v-model="missionContent" required />
       </div>
       <div class="second">
         <div class="male">
@@ -20,7 +20,7 @@
     </div>
 
     <div class="btn-group">
-      <button class="modifyBtn" @click="modify(missionId)">수정</button>
+      <button class="modifyBtn" @click="modify(props.mission.id)">수정</button>
       <button class="cancelBtn" @click="cancel">취소</button>
     </div>
   </div>
@@ -28,15 +28,19 @@
 
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+axios.defaults.withCredentials = true;
 
-const REST_API_URL = `http://localhost:1219/mission`;
+const props = defineProps({
+  mission: Object,
+});
+const REST_API_URL = `https://port-0-fitness-bet-m3wwfrufa46b114f.sel4.cloudtype.app/mission`;
 
-const missionContent = ref("");
-const maleMin = ref();
-const maleMax = ref();
-const femaleMin = ref();
-const femaleMax = ref();
+const missionContent = ref(props.mission.content);
+const maleMin = ref(props.mission.maleMin);
+const maleMax = ref(props.mission.maleMax);
+const femaleMin = ref(props.mission.femaleMin);
+const femaleMax = ref(props.mission.femaleMax);
 
 const isValidRange = ref(false);
 
@@ -58,22 +62,21 @@ const checkRange = function () {
 const emit = defineEmits(["modal", "reload"]);
 
 const modify = function (missionId) {
-  const modifyMissionData = ref({
-    content: missionContent.value,
-    maleMin: maleMin.value,
-    maleMax: maleMax.value,
-    femaleMin: femaleMin.value,
-    femaleMax: femaleMax.value,
-  });
   checkRange();
   if (isValidRange) {
     axios
-      .post(`${REST_API_URL}/${missionId}`, modifyMissionData.value)
+      .put(`${REST_API_URL}/${missionId}`, {
+        content: missionContent.value,
+        maleMin: maleMin.value,
+        maleMax: maleMax.value,
+        femaleMin: femaleMin.value,
+        femaleMax: femaleMax.value,
+      })
       .then((response) => {
         console.log(response.data);
         alert("수정되었습니다.");
-        emit("reload");
         emit("modal");
+        emit("reload");
       })
       .catch((error) => {
         console.error("미션 수정 에러 :", error);
@@ -83,7 +86,26 @@ const modify = function (missionId) {
 
 const cancel = () => {
   emit("modal");
+  missionContent.value = props.mission.content;
+  maleMin.value = props.mission.maleMin;
+  maleMax.value = props.mission.maleMax;
+  femaleMin.value = props.mission.femaleMin;
+  femaleMax.value = props.mission.femaleMax;
 };
+
+watch(
+  () => props.mission,
+  (newMission) => {
+    if (newMission) {
+      missionContent.value = newMission.content;
+      maleMin.value = newMission.maleMin;
+      maleMax.value = newMission.maleMax;
+      femaleMin.value = newMission.femaleMin;
+      femaleMax.value = newMission.femaleMax;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped>

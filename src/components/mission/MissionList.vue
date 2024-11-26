@@ -1,16 +1,15 @@
 <template>
-  <div class="containerBox" @click.self = "closeCreateModal">
+  <div class="containerBox" @click.self="closeCreateModal">
     <div class="modal" v-show="createModalOn">
       <MissionCreateModal @modal="createModalState" @reload="reloadData" />
     </div>
-    <div class="modal" v-show="modifyModalOn" @click.self = "closeModifyModal">
-      <MissionUpdateModal @modal="modifyModalState" />
+    <div class="modal" v-show="modifyModalOn" @click.self="closeModifyModal">
+      <MissionUpdateModal @modal="modifyModalState" @reload="reloadData" :mission="modifyingMission" />
     </div>
     <header :class="{ blur: modalOn }">
       <h3>미션 목록</h3>
       <div class="btns" v-if="loginUserAdmin == 1">
         <button class="createBtn btn" @click="createMission">미션 추가</button>
-        <button class="modifyBtn btn" @click="modifyMission">미션 수정</button>
       </div>
     </header>
     <div class="table-container">
@@ -21,7 +20,7 @@
             <th rowspan="2" width="25%">미션 내용</th>
             <th colspan="2" width="32%">남자</th>
             <th colspan="2" width="32%">여자</th>
-            <th rowspan="2" width="16%" v-if="loginUserAdmin == 1">삭제</th>
+            <th rowspan="2" width="16%" v-if="loginUserAdmin == 1">관리</th>
           </tr>
           <!-- 두 번째 헤더: "최소 난이도", "최대 난이도" -->
           <tr>
@@ -40,6 +39,67 @@
             <td>{{ mission.femaleMin }}</td>
             <td>{{ mission.femaleMax }}</td>
             <td v-if="loginUserAdmin == 1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                x="0px"
+                y="0px"
+                width="30"
+                height="30"
+                viewBox="0,0,256,256"
+                @click="modifyMission(mission)"
+              >
+                <g
+                  fill="none"
+                  fill-rule="nonzero"
+                  stroke="none"
+                  stroke-width="none"
+                  stroke-linecap="none"
+                  stroke-linejoin="none"
+                  stroke-miterlimit="10"
+                  stroke-dasharray=""
+                  stroke-dashoffset="0"
+                  font-family="none"
+                  font-weight="none"
+                  font-size="none"
+                  text-anchor="none"
+                  style="mix-blend-mode: normal"
+                >
+                  <g transform="scale(5.33333,5.33333)">
+                    <path
+                      d="M11,43.8l2.4,-8.4c0.1,-0.5 0.4,-0.9 0.8,-1.3l22,-21.9c2.3,-2.3 6,-2.1 8.1,0.4c1.8,2.2 1.5,5.5 -0.5,7.5l-21.9,21.7c-0.4,0.4 -0.8,0.6 -1.3,0.8l-8.4,2.4c-0.7,0.2 -1.4,-0.5 -1.2,-1.2z"
+                      fill="#a5d5d6"
+                      stroke="none"
+                      stroke-width="1"
+                      stroke-linecap="butt"
+                      stroke-linejoin="miter"
+                    ></path>
+                    <path
+                      d="M18.4,21.8l13.7,-13.7c2.3,-2.3 6,-2.1 8.1,0.4c1.8,2.2 1.5,5.5 -0.5,7.5l-2.8,2.8"
+                      fill="none"
+                      stroke="#18193f"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                    <path
+                      d="M32.5,23.3l-14.6,14.5c-0.4,0.4 -0.8,0.6 -1.3,0.8l-10.1,2.9l2.9,-10.1c0.1,-0.5 0.4,-0.9 0.8,-1.3l3.7,-3.7"
+                      fill="none"
+                      stroke="#18193f"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                    <path
+                      d="M29.1,11.1l7.8,7.8"
+                      fill="none"
+                      stroke="#18193f"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </g>
+                </g>
+              </svg>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 x="0px"
@@ -118,8 +178,8 @@ import { onMounted } from "vue";
 import MissionCreateModal from "./modal/MissionCreateModal.vue";
 import MissionUpdateModal from "./modal/MissionUpdateModal.vue";
 import axios from "axios";
-
-const REST_API_URL = `http://localhost:1219/mission`;
+axios.defaults.withCredentials = true;
+const REST_API_URL = `https://port-0-fitness-bet-m3wwfrufa46b114f.sel4.cloudtype.app/mission`;
 
 const loginUserAdmin = sessionStorage.getItem("isAdmin");
 const missionStore = useMissionStore();
@@ -140,7 +200,9 @@ const createMission = () => {
   modalOn.value = true;
 };
 
-const modifyMission = () => {
+const modifyingMission = ref({});
+const modifyMission = (mission) => {
+  modifyingMission.value = mission;
   modifyModalOn.value = true;
   modalOn.value = true;
 };
@@ -154,10 +216,10 @@ const modifyModalState = () => {
   modifyModalOn.value = false;
 };
 
-const closeCreateModal = () =>{
+const closeCreateModal = () => {
   createModalOn.value = false;
   modalOn.value = false;
-}
+};
 
 const remove = (missionId) => {
   axios

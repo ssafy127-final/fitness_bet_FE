@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h4>© 2024. Teamname. All rights reserved.</h4>
+    <h4>© 2024. So Kyu T. All rights reserved.</h4>
   </div>
 </template>
 
