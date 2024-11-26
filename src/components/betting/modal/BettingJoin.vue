@@ -106,6 +106,9 @@ const joinBetting = () => {
           if (res.status == 200) {
             alert("참여가 완료되었습니다.");
           }
+          if (err.status == 400) {
+            alert("이미 마감된 배팅입니다.");
+          }
         })
         .catch((err) => {
           if (err.status == 400) {
