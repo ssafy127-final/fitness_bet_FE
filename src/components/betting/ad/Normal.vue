@@ -3,7 +3,7 @@
     :style="{
       backgroundColor: currentBackColor,
       borderColor: currentBorderColor,
-      fontStyle: props.contentInfo.style ? props.contentInfo.style : normal,
+      fontStyle: props.contentInfo.style ? props.contentInfo.style : 'normal',
     }"
   >
     <span :style="{ color: props.contentInfo.firstColor }">{{ props.contentInfo.firstText }}</span>

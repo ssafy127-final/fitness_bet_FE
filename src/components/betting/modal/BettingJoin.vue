@@ -104,12 +104,19 @@ const joinBetting = () => {
         })
         .then((res) => {
           if (res.status == 200) {
-            store.getDetailFromBack(route.params.id, userStore.loginUser.id);
-            store.getList(userStore.loginUser.id);
+            alert("참여가 완료되었습니다.");
           }
         })
-        .then(() => emit("modalOff"))
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          if (err.status == 400) {
+            alert("이미 마감된 배팅입니다.");
+          }
+        })
+        .finally(() => {
+          store.getDetailFromBack(route.params.id, userStore.loginUser.id);
+          store.getList(userStore.loginUser.id);
+          emit("modalOff");
+        });
     }
   }
 };
